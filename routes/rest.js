@@ -2,7 +2,7 @@ var express = require('express');
 var _ = require('lodash');
 var router = express.Router();
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/orders');
+// mongoose.connect('mongodb://localhost/orders');
 mongoose.Promise = global.Promise;
 
 var Order = mongoose.model('Order',
