@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../../webcomponentsjs/webcomponents.min.js"></script>
+	<link rel="import" href="../../sortable-table.html">
+	<link rel="import" href="../project-docs.html">
+	<style shim-shadowdom>
+		.paramType { color: #526E9C }
+	</style>
+</head>
+<body unresolved is="project-docs">
+
+	<h1>Server-Side Pagination</h1>
+
+	For large datasources, a remote datasource can be used so that the only visible rows have to be download to the client.
+	The most common method for remote data is using REST server.
+
+	<h2>Plug-in Support for Custom APIs</h2>
+
+	The <code>&lt;sortable-table&gt;</code> will try to load any node from its content that has <code><strong>role="datasource"</strong></code>.<br>
+	This means any custom element can be used as a datasource, as long as it implements the following attributes:<br>
+	<pre>
+	<strong>&lt;your-component</strong>
+		start=<span class="paramType">[int]</span>
+		length=<span class="paramType">[int]</span>
+		search=<span class="paramType">[string]</span>
+		sortColumn=<span class="paramType">[string]</span>
+		sortDescending=<span class="paramType">[boolean]</span>
+		filters=<span class="paramType">[array({ column: [string], op: [string], value: [string] })]</span>
+		columns=<span class="paramType">[array({ name: [string] })]</span>
+		<em>(output)</em> filterOps=<span class="paramType">[array({ title: [string], op: [string], html: [string] })]</span>
+		<em>(output)</em> loading=<span class="paramType">[boolean]</span>
+		<em>(output)</em> data=<span class="paramType">[array(json)]</span>
+		<em>(output)</em> dataSize=<span class="paramType">[int]</span>
+	<strong>&gt;&lt;/your-component&gt;</strong>
+	</pre>
+
+</body>
+</html>

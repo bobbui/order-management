@@ -1,0 +1,134 @@
+<!--
+@homepage https://github.com/stevenrskelton/sortable-table
+@element datatables-ajax
+@demo http://files.stevenskelton.ca/sortable-table/examples/datatables-ajax
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-ajax/core-ajax.html">
+
+<polymer-element hidden
+	name="datatables-ajax"
+	attributes="url withCredentials start length search sortColumn sortDescending filters filterOps columns data dataSize loading"
+>
+<script>
+	"use strict";
+	Polymer({
+		url: null,
+		withCredentials: false,
+		start: 0,
+		length: -1,
+		search: "",
+		sortColumn: null,
+		sortDescending: false,
+		filters: [],
+		filterOps: ['Contains'],
+		columns: null,
+		ajax: null,
+		draw: 0,
+		drawReceived: 0,
+		columnsCache: null,
+		loading: false,
+		created: function(){
+			if(!this.columns) this.columns = [];
+			this.columnsCache = [];
+		},
+		ready: function() {
+			var ajax = document.createElement('core-ajax');
+			ajax.handleAs = 'json';
+			var self = this;
+			ajax.addEventListener("core-response", function(e){ self.handleResponse.call(self, e); });
+			this.ajax = ajax;
+			this.ajax.url = this.url;
+			this.ajax.withCredentials = this.withCredentials;
+			this.job('go',this.go);
+		},
+		handleResponse: function(e){
+			var response = e.detail.response;
+			var columns;
+			this.columnsCache = this.columnsCache.filter(function(element){
+				if(element.draw === response.draw) columns = element.columns;
+				return element.draw > response.draw;
+			});
+			if(response.draw > this.drawReceived){
+				this.drawReceived = response.draw;
+				this.dataSize = response.recordsTotal;
+				if(columns.length>0){
+					this.data = response.data.map(function(currentValue){
+						var obj = {};
+						currentValue.forEach(function(element, i){
+							obj[columns[i].name] = element;
+						});
+						return obj;
+					});
+				}else this.data = response.data;
+			}
+			if(this.draw <= this.drawReceived) this.loading = false;
+			this.fire('data-updated', { data: this.data, dataSize: this.dataSize });
+		},
+		go: function(){
+			if(this.columns.length>0){
+				this.draw++;
+				var params = {
+					draw: this.draw,
+					start: this.start,
+					length: this.length /*,
+					"search[value]": this.search,
+					"search[regex]": false,
+					"columns[0][data]": "",
+					"columns[0][name]": "",
+					"columns[0][searchable]": true,
+					"columns[0][orderable]": true,
+					"columns[0][search][value]": "",
+					"columns[0][search][regex]": false*/
+				};
+				var filters = this.filters;
+				var columnFilters = function(column){
+					var r = '';
+					filters.forEach(function(element){
+						if(element.column === column.name) r = element.value;
+					});
+					return r;
+				};
+				this.columns.forEach(function(element,i){
+					params["columns[" + i + "][data]"] = element.name;
+					params["columns[" + i + "][name]"] = element.name;
+					params["columns[" + i + "][searchable]"] = true;
+					params["columns[" + i + "][orderable]"] = true;
+					params["columns[" + i + "][search][value]"] = columnFilters(element);
+					params["columns[" + i + "][search][regex]"] = false;
+				});
+				if(this.sortColumn){
+					if(this.columns.length===0) alert('columns must be defined to define sort');
+					else {
+						var index = -1;
+						var self = this;
+						if(this.columns.every(function(element,i){
+							if(element.name !== self.sortColumn) return true;
+							else{
+								index = i;
+								return false;
+							}
+						})) alert('could not find column `' + this.sortColumn + '` in `columns`');
+						else {
+							params['order[0][column]'] = index;
+							if(this.sortDescending) params['order[0][dir]'] = 'desc';
+							else params['order[0][dir]'] = 'asc';
+						}
+					}
+				}
+				this.ajax.params = params;
+				this.columnsCache.push({draw: this.draw, columns: JSON.parse(JSON.stringify(this.columns))});
+				if(!this.loading) this.loading = true;
+				this.ajax.go();
+			}
+		},
+		filtersChanged: function(){ this.job('go',this.go); },
+		columnsChanged: function(){ this.job('go',this.go); },
+		startChanged: function(){ this.job('go',this.go); },
+		lengthChanged: function(){ this.job('go',this.go); },
+		sortColumnChanged: function(){ this.job('go',this.go); },
+		sortDescendingChanged: function(){ this.job('go',this.go); }
+	});
+</script>
+</polymer-element>

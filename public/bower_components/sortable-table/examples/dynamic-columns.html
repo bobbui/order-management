@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../webcomponentsjs/webcomponents.min.js"></script>
+	<link rel="import" href="../sortable-table.html">
+	<link rel="import" href="fruit-icon.html">
+	<link rel="import" href="json-stringify.html">
+	<link rel="import" href="project-docs.html">
+
+	<style shim-shadowdom>
+		sortable-table { width: 500px; margin-left: 65px; }
+		sortable-table::shadow td.column-alice,
+		sortable-table::shadow td.column-bill,
+		sortable-table::shadow td.column-casey,
+		sortable-table::shadow td.column-average,
+		sortable-table::shadow td.column-total {
+			text-align: right;
+			padding-right: 5px;
+			height: 30px;
+		}
+	</style>
+</head>
+<body unresolved is="project-docs">
+
+	<h1>Dynamically Changing Columns and Templates</h1>
+
+	Adding, removing, and reordering <code>columns</code> should not break sort.<br>
+	Changing a <code>cellTemplate</code>, and column scoped <code>headerTemplate</code>, or <code>footerTemplate</code> after load should work correctly.<br>
+	Column reordering via drag-and-drop should work correctly.
+
+	<p>
+
+	<span style="color:red">Polymer seems to have broken this in its polyfils - native browsers like Chromium have no issue with changing templates</span>
+
+	<p>
+
+	<template id="example" bind>
+		<sortable-table class="default" data="{{data}}" columns="{{columns}}">
+			<template id="fruitsTemplateIcon">
+				<td style="padding:0;width:48px;text-align:center;">
+					<fruit-icon fruit="{{value}}"></fruit>
+				</td>
+			</template>
+
+			<template id="fruitsTemplateText">
+				<td style="font-size:20px;line-height:20px;text-align:left;">
+					<strong>{{value}}</strong>
+				</td>
+			</template>
+		</sortable-table>
+		<h4><code>columns</code> JSON</h4>
+		<json-stringify data="{{columns}}"></json-stringify>
+	</template>
+
+	<p>
+
+	<input type="button" onclick="toggleTemplate(this)" value="Use Text Fruit Template">
+
+	<input type="button" onclick="toggleVisibility(this)" value="Hide Middle 3 Columns">
+
+	<input type="button" onclick="toggleReorder(this)" value="Reorder Last 2 Columns">
+
+	<script>
+	var fruits = [
+		{fruit: 'apple', alice: 4, bill: 10, casey: 2, average: 5.3, total: 16 },
+		{fruit: 'banana', alice: 0, bill: 4, casey: 0, average: 1.3, total: 4 },
+		{fruit: 'grape', alice: 2, bill: 3, casey: 5, average: 3.3, total: 10 },
+		{fruit: 'pear', alice: 4, bill: 2, casey: 8, average: 4.6, total: 14 },
+		{fruit: 'strawberry', alice: 0, bill: 14, casey: 1, average: 5, total: 15 }
+	];
+
+	var columns = [
+		{name:'fruit', cellTemplate: 'fruitsTemplateIcon'},
+		{name:'alice'},
+		{name:'bill'},
+		{name:'casey'},
+		{name:'average'},
+		{name:'total'}
+	];
+
+	function toggleTemplate(b){
+		var fruitColumn = columns.filter(function(element){ return element.name == 'fruit'; })[0];
+		//change template used for fruit
+		if(fruitColumn){
+			if(fruitColumn.cellTemplate == 'fruitsTemplateIcon'){
+				fruitColumn.cellTemplate = 'fruitsTemplateText';
+				b.value = 'Use Icon Fruit Template';
+			}else{
+				fruitColumn.cellTemplate = 'fruitsTemplateIcon';
+				b.value = 'Use Text Fruit Template';
+			}
+		}
+	}
+
+	var removedColumns = null;
+	function toggleVisibility(b){
+		//show/hide 3 person columns
+		if(columns.length==6){
+			//remove
+			removedColumns = columns.splice(1,3);
+			b.value = 'Show 3 Hidden Columns';
+		}else{
+			//insert
+			columns.splice(1,0,removedColumns[0],removedColumns[1],removedColumns[2]);
+			b.value = 'Hide Middle 3 Columns';
+		}
+	}
+
+	function toggleReorder(b){
+		//swap last 2 columns (total & average)
+		var l = columns.length;
+		var secondLast = columns[l - 2];
+		columns.splice(l - 2, 1);
+		columns.splice(l - 1, 0, secondLast);
+	}
+
+	window.addEventListener('polymer-ready', function(){
+		var model = {
+			data: fruits,
+			columns: columns
+		};
+		document.getElementById('example').model = model;
+	});
+	</script>
+</body>
+</html>

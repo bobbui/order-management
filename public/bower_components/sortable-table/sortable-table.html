@@ -1,0 +1,974 @@
+<!--
+@homepage https://github.com/stevenrskelton/sortable-table
+@element sortable-table
+@demo http://files.stevenskelton.ca/sortable-table/examples/
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-dropdown/core-dropdown.html">
+<script src="columnDragMixin.js"></script>
+<script src="rowDragMixin.js"></script>
+<script src="rowFiltersMixin.js"></script>
+<script src="rowEditorMixin.js"></script>
+<script src="../json5/lib/json5.js"></script>
+<script src="../time-elements/time-elements.js"></script>
+<link rel="import" href="html-echo.html">
+
+<polymer-element
+	name="sortable-table"
+	attributes="
+		args
+		cellTemplate
+		checkbox
+		columns
+		data
+		dataSize
+		disableColumnMove
+		filterTemplate
+		footerTemplate
+		grid
+		headerTemplate
+		loading
+		multiRowEdit
+		multiSelect
+		page
+		pageSize
+		rowEditorTemplate
+		rowSelection
+		rowTemplate
+		selected
+		sortColumn
+		sortDescending
+		userSort
+	"
+	style="display:block"
+>
+<template>
+	<content select='[role="datasource"]'></content>
+	<content select="core-scroll-threshold"></content>
+	<style>
+	.sortable-table {
+		width: 100%;
+		max-width: 100%;
+		border-collapse: collapse;
+	}
+	.checkbox-column {
+		width: 1em;
+		vertical-align: middle;
+	}
+	.checkbox-column input[type=checkbox] {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.open-below {
+		top: 22px;
+		border: 1px solid #ddd;
+	}
+	th.checkbox-column input[type=checkbox] {
+		vertical-align: middle;
+	}
+	tbody.grid {
+		font-size: 0;
+	}
+	tbody.grid > tr {
+		box-sizing: border-box;
+		display: inline-block;
+		font-size: initial;
+	}
+	table.articlePager {
+		width: 100%;
+	}
+	table.articlePager td:first-of-type {
+		cursor: pointer;
+	}
+	table.articlePager td:nth-of-type(2) {
+		width: 100%;
+	}
+	table.articlePager td:nth-of-type(3) {
+		cursor: pointer;
+	}
+	.sortable-table thead .dropdown-menu {
+		position: absolute;
+		z-index: 1000;
+		display: none;
+		list-style: outside none none;
+		background-color: #FFF;
+	}
+	.sortable-table thead .open > .dropdown-menu {
+		display: block;
+	}
+	:host(.default) .sortable-table {
+		border-collapse: collapse;
+		border: 1px solid #ccc;
+	}
+	:host(.default) .sortable-table .row-selection {
+		cursor: pointer;
+	}
+	:host(.default) .sortable-table tbody td {
+		border: 1px dotted #ccc;
+	}
+	:host(.default) .sortable-table tbody tr:nth-of-type(even) {
+		background-color: rgba(255,255,224,0.25);
+	}
+	:host(.default) .sortable-table tfoot td {
+		border: 1px solid #ccc;
+		background-color: #F5F8FA;
+	}
+	:host(.default) .sortable-table thead th {
+		border: 1px solid #ccc;
+		background-color: #0084B4;
+		color: white;
+		cursor: pointer;
+	}
+	:host(.default) .sortable-table thead th.sorted-column-asc {
+		text-decoration: overline;
+	}
+	:host(.default) .sortable-table thead th.sorted-column-desc {
+		text-decoration: underline;
+	}
+	:host(.default) .sortable-table thead th.column-move-right {
+		border-right-color: #FBBA37;
+		background: #FBBA37; /* Older browsers */
+		background: -moz-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* FF3.6+ */
+		background: -webkit-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* IE10+ */
+		background: linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* W3C */
+	}
+	:host(.default) .sortable-table thead th.column-move-left {
+		border-left-color: #FBBA37;
+		background: #FBBA37; /* Older browsers */
+		background: -moz-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* FF3.6+ */
+		background: -webkit-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* IE10+ */
+		background: linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* W3C */
+	}
+	:host(.default) .sortable-table thead th.column-in-move,
+	:host(.default) .sortable-table tbody tr.row-in-move {
+		opacity: 0.4;
+	}
+	:host(.default) .sortable-table tbody tr.row-move-above {
+		background-color: purple;
+	}
+	:host(.default) .sortable-table tbody tr.row-move-below {
+		background-color: red;
+	}
+	:host(.default) .sortable-table tbody tr.selected-row {
+		background-color: rgba(0,96,200,0.2);
+	}
+	:host(.default) .sortable-table thead .dropdown-menu {
+		border: 1px solid #ccc;
+		background-color: #0084B4;
+		text-align: left;
+		min-width: 160px;
+		padding: 4px;
+		margin-top: 1px;
+	}
+	:host(.default) .sortable-table thead .dropdown-menu .btn {
+		text-align: center;
+	}
+	@-webkit-keyframes progress-bar-stripes{
+		from{
+			background-position:40px 0
+		}
+		to{
+			background-position:0 0
+		}
+	}
+	@-o-keyframes progress-bar-stripes{
+		from{
+			background-position:40px 0
+		}
+		to{
+			background-position:0 0
+		}
+	}
+	@keyframes progress-bar-stripes{
+		from{
+			background-position:40px 0
+		}
+
+		to{
+			background-position:0 0
+		}
+	}
+	.indexedPager > ul > li:first-of-type a:after,
+	.defaultPager > div:nth-of-type(1) > button:nth-of-type(1):after {
+		content: '«';
+	}
+	.simplePager > button:nth-of-type(1):after,
+	.defaultPager > div:nth-of-type(1) > button:nth-of-type(2):after {
+		content: '‹';
+	}
+	.simplePager > button:nth-of-type(2):after,
+	.defaultPager > div:nth-of-type(2) > button:nth-of-type(1):after {
+		content: '›';
+	}
+	.indexedPager > ul > li:last-of-type a:after,
+	.defaultPager > div:nth-of-type(2) > button:nth-of-type(2):after {
+		content: '»';
+	}
+</style>
+
+	<template id="html">
+		<html-echo html="{{value}}"></html-echo>
+	</template>
+
+	<template id="simplePager">
+		<div class="simplePager" horizontal layout center>
+			<span flex>{{dataSize}} Results</span>
+			<button disabled?="{{page<=1}}" class="btn btn-default btn-sm" on-click="{{moveToPreviousPage}}"></button>
+			<span>{{page}} of {{lastPage}}</span>
+			<button disabled?="{{page>=lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToNextPage}}"></button>
+		</div>
+	</template>
+
+	<template id="indexedPager">
+		<div class="indexedPager" style="width:100%;text-align:center;font-weight:normal;">
+			<ul class="pagination">
+				<li class="{{page==1 ? 'disabled' : ''}}" disabled?="{{page==1}}" on-click="{{moveToFirstPage}}" role="button"><a href="#" onclick="return false;"></a></li>
+				<template repeat="{{i in lastPage | naturalNumbers(page)}}">
+					<li class="{{page==i ? 'active' : ''}}" on-click="{{moveToPage}}" role="button"><a href="#" onclick="return false;">{{i}}</a></li>
+				</template>
+				<li class="{{page==lastPage ? 'disabled' : ''}}" disabled="{{page==lastPage}}" on-click="{{moveToLastPage}}" role="button"><a href="#" onclick="return false;"></a></li>
+			</ul>
+		</div>
+	</template>
+
+	<template id="defaultPager">
+		<div class="defaultPager" horizontal layout center>
+			<div class="btn-group">
+				<button disabled?="{{page==1}}" class="btn btn-default btn-sm" on-click="{{moveToFirstPage}}"></button><!--
+				--><button disabled?="{{page<=1}}" class="btn btn-default btn-sm" on-click="{{moveToPreviousPage}}"></button>
+			</div>
+
+			<span class="x-toolbar-separator-horizontal"></span>
+
+			<span style="margin:0 8px">Page <input type="number" style="width:30px;text-align:right;margin:0;display:inline-block;padding-bottom:2px;" min="1" max="{{lastPage}}" value="{{page}}"> of {{lastPage}}</span>
+
+			<span class="x-toolbar-separator-horizontal"></span>
+
+			<div class="btn-group">
+				<button disabled?="{{page>=lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToNextPage}}"></button><!--
+				--><button disabled?="{{page==lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToLastPage}}"></button>
+			</div>
+			<span flex style="text-align:right;margin-right:6px;">Displaying {{page > lastPage ? (lastPage-1) * pageSize + 1 : ((page - 1) * pageSize) + 1}} - {{page >= lastPage ? dataSize : page * pageSize}} of {{dataSize}}</span>
+		</div>
+	</template>
+
+	<template id="articlePager">
+		<table class="articlePager">
+			<tr>
+				<template if="{{dataSize > pageSize}}">
+					<td role="button" class="btn btn-default" on-click="{{showMore}}">Show More</td>
+				</template>
+				<template if="{{dataSize <= pageSize}}">
+					<td style="display:none"></td>
+				</template>
+				<td><span class="x-toolbar-separator-horizontal" hidden?="{{dataSize <= pageSize}}"></span> Showing {{pageSize}} of {{dataSize}}</td>
+				<td>
+					<template if="{{grid!=null}}">
+						<select on-change="{{toggleGrid}}">
+							<option value="grid" selected?="{{grid}}">▦ Grid</option>
+							<option value="grid" selected?="{{!grid}}">▤ List</option>
+						</select>
+					</template>
+				</td>
+			</tr>
+		</table>
+	</template>
+
+	<template id="infinitePager">
+		<div class="infinitePager">
+			<template if="{{loading}}">
+				<div class="loading">Loading</div>
+			</template>
+			<template if="{{!loading && ((data.length < dataSize) || (page < lastPage))}}">
+				<button class="more btn btn-primary" on-click="{{showMore}}">More</div>
+			</template>
+		</div>
+	</template>
+
+	<template id="simpleFilters">
+		<div style="float:right;padding-top:2px"  horizontal layout center relative on-click="{{stopPropagation}}">
+			<img alt="Filter" src="{{resolvePath('img/icons/find.png')}}" on-click="{{setFiltersWidth}}">
+			<core-dropdown halign="right" class="open-below dropdown-menu">
+				<input type="text" on-keypress="{{addFilterReturn}}" data-op="=">
+			</core-dropdown>
+		</div>
+	</template>
+
+	<template id="verticalFilters">
+		<div class="btn-group" style="float:right;" on-click="{{stopPropagation}}">
+			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" on-click="{{setFiltersWidth}}">
+				<img alt="Filter" src="{{resolvePath('img/filter.svg')}}" height="16">
+			</button>
+			<ul class="dropdown-menu" role="menu">
+				<li style="text-align:center" on-click="{{closeFilter}}">Add New Filter</li>
+				<li class="divider"></li>
+				<li><table>
+					<template repeat="{{filterOp in getFilterOps(column)}}">
+						<tr>
+							<td><input type="text" data-op="{{filterOp.op}}" on-keypress="{{addFilterReturn}}"></td>
+							<td class="btn btn-primary" on-click="{{addFilter}}" title="{{filterOp.title}}" style="white-space:nowrap;display:table-cell;padding:0 6px;min-width:24px">{{filterOp.html}}</td>
+						</tr>
+					</template>
+				</table></li>
+			</ul>
+		</div>
+	</template>
+
+	<template id="fullFilters">
+		<div style="float:right;padding-top:2px"  horizontal layout center relative on-click="{{stopPropagation}}">
+			<img alt="Filter" src="{{resolvePath('img/icons/find.png')}}" on-click="{{setFiltersWidth}}">
+			<core-dropdown halign="right" class="open-below dropdown-menu">
+				<template repeat="{{filterOp in getFilterOps(column)}}">
+					<button on-click="{{addFilter}}" title="{{filterOp.title}}" data-op="{{filterOp.op}}">{{filterOp.html}}</button>
+				</template>
+				<input type="text">
+			</core-dropdown>
+		</div>
+	</template>
+
+	<table class="sortable-table">
+		<thead>
+			<tr on-click="{{changeSort}}">
+				<template if="{{checkbox}}">
+					<th class="checkbox-column"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{dataSize == selected.length}}"></th>
+				</template>
+				<template repeat="{{column,i in columns}}">
+					<template ref="{{column.headerTemplate || headerTemplate}}" bind>
+						<th
+							class="column-{{column.name}} column-{{i}}
+								{{sortColumn == column.name && sortDescending ? 'sorted-column-desc' : ''}}
+								{{sortColumn == column.name && !sortDescending ? 'sorted-column-asc' : ''}}"
+							draggable="{{!disableColumnMove && !(rowTemplate || rowEditorTemplate)}}"
+							on-dragstart="{{handleTHDragStart}}"
+							on-dragenter="{{handleTHDragEnter}}"
+							on-dragover="{{handleTHDragOver}}"
+							on-dragleave="{{handleTHDragLeave}}"
+							on-drop="{{handleTHDrop}}"
+							on-dragend="{{handleTHDragEnd}}"
+						>
+							<template ref="{{filterTemplate}}" bind></template>
+							{{column.title == null ? column.name : column.title}}
+						</th>
+					</template>
+				</template>
+			</tr>
+		</thead>
+		<template if="{{forceFilterRefresh}}" bind="{{columns | observing(forceFilterRefresh) as columns}}">
+			<thead>
+				<tr>
+					<template if="{{checkbox}}">
+						<th>
+							<img
+								src="{{resolvePath('img/icons/cancel.png')}}"
+								alt="Clear Filters"
+								on-click="{{clearFilters}}"
+								height="16"
+								style="padding-top:1px"
+							>
+						</th>
+					</template>
+					<template repeat="{{column in columns}}">
+						<th style="vertical-align: top">
+							<template repeat="{{filter in column.filters}}">
+								<img
+									src="{{resolvePath('img/icons/delete.png')}}"
+									alt="Remove Filter"
+									on-click="{{removeFilter}}"
+									height="16"
+									style="float:right;padding-top:1px"
+								>
+								<div style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+									{{filter.op}} {{filter.value}}
+								</div>
+							</template>
+						</th>
+					</template>
+				</tr>
+			</thead>
+		</template>
+		<tbody class="{{grid ? ' grid' : ''}}">
+			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, args, editRow, (args || []).length + (selected || []).length + data.length + forceRefresh + forceFilterRefresh)}}">
+				<tr
+					class="{{record.selected ? 'selected-row' : '' }}{{record.editMode ? ' editor-row' : ''}}{{record.dirty ? ' edited-row' : ''}}"
+					on-click="{{rowSelect}}"
+					on-dblclick="{{rowEdit}}"
+					draggable="{{userSort}}"
+					on-dragstart="{{handleTRDragStart}}"
+					on-dragenter="{{handleTRDragEnter}}"
+					on-dragover="{{handleTRDragOver}}"
+					on-dragleave="{{handleTRDragLeave}}"
+					on-drop="{{handleTRDrop}}"
+					on-dragend="{{handleTRDragEnd}}"
+				>
+					<template if="{{checkbox}}">
+						<td class="checkbox-column"><input type="checkbox" on-change="{{checkedbox}}" checked?="{{record.selected}}"></td>
+					</template>
+					<template if="{{record.editMode}}" ref="{{rowEditorTemplate}}"></template>
+					<template if="{{!record.editMode}}" ref="{{rowTemplate}}" bind>
+						<template repeat="{{column in columns}}" bind>
+							<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{record.fields[column.name]}}">
+								<td
+									class="column-{{column.name}}
+										{{sortColumn == column.name && sortDescending ? 'sorted-column-desc' : ''}}
+										{{sortColumn == column.name && !sortDescending ? 'sorted-column-asc' : ''}}"
+								>{{value}}</td>
+							</template>
+						</template>
+					</template>
+				</tr>
+			</template>
+		</tbody>
+		<tfoot>
+			<template if="{{showFooter && forceFooterRefresh}}">
+				<tr class="footercells">
+					<template if="{{checkbox}}">
+						<td></td>
+					</template>
+					<template repeat="{{column in columns}}">
+						<template bind="{{templateData in data | selectProperty(column, args, forceFooterRefresh)}}">
+							<template ref="{{column.footerTemplate}}" bind="{{templateData}}">
+								<td></td>
+							</template>
+						</template>
+					</template>
+				</tr>
+			</template>
+			<template if="{{footerTemplate && forceRefresh && forceFooterRefresh}}">
+				<tr>
+					<td colspan="{{columns.length + (checkbox ? 1 : 0)}}"><template ref="{{footerTemplate}}" bind></template></td>
+				</tr>
+			</template>
+		</tfoot>
+	</table>
+</template>
+
+<script>
+	"use strict";
+	Polymer(Polymer.mixin({
+		disableColumnMove: false,
+		footerTemplate: null,
+		headerTemplate: null,
+		lastPage: 1,
+		multiSelect: false,
+		page: 1,
+		pageSize: Number.MAX_VALUE,
+		dataSize: 0,
+		rowEditorTemplate: null,
+		multiRowEdit: false,
+		rowSelection: false,
+		rowTemplate: null,
+		selected: null,
+		sortColumn: null,
+		sortDescending: false,
+		showFooter: false,
+		grid: false,
+		toggleGrid: function(e){ this.grid = !this.grid; },
+		dataSource: null,
+		userSort: false,
+		loading: false,
+		publish: {
+			args: {},
+			data: [],
+			columns: [],
+			undoStack: []
+		},
+		ready: function(){
+			var self = this;
+			var dataSource = this.querySelector('[role="datasource"]');
+			if(dataSource){
+				if(!this.dataSource){
+					this.dataSource = dataSource;
+					this.rebuildColumns();
+					this.dataSource.length = this.pageSize;
+					this.dataSource.sortColumn = this.sortColumn;
+					this.dataSource.sortDescending = this.sortDescending;
+					if(!!this.dataSource.filterOps) this.filterOps = this.dataSource.filterOps;
+					(new PathObserver(this.dataSource, 'loading')).open(function(newValue) {
+						self.loading = newValue;
+					});
+					(new PathObserver(this.dataSource, 'data')).open(function(newValue) {
+						self.data = newValue;
+					});
+					(new PathObserver(this.dataSource, 'dataSize')).open(function(newValue) {
+						self.dataSize = newValue;
+					});
+				}
+			}else{
+				[].forEach.call(this.childNodes, function(element) {
+					if(element.nodeName === "#text"){
+						var text = element.textContent.trim();
+						if(text.length>0){
+							var data;
+							try{
+								data = JSON.parse(text);
+							} catch(e){
+								try {
+									data = JSON5.parse(text);
+								} catch(e){
+									alert('Could not parse data.\n\nArrays, JSON and JSON5 are supported.');
+								}
+							}
+							if(data){
+								self.data = data;
+								self.dataSize = data.length;
+								self.rebuildColumns();
+							}else self.data = [];
+						}
+					}
+				});
+			}
+			this.onMutation(this, this.ready);
+		},
+		/**
+		 *	Logic
+		 */
+		observing: function(o){ return o; },
+		isArray: function(a){
+			return Object.prototype.toString.call(a) === '[object Array]';
+		},
+		stopPropagation: function(e){ e.stopPropagation(); },
+		customFormat: function(v,format){
+			if(format) return format(v);
+			else return v;
+		},
+		toggleRowFromSelected: function(row){
+			if(this.isArray(this.selected)){
+				var index = this.selected.indexOf(row);
+				if(index > -1){
+					this.selected.splice(index, 1);
+				}else{
+					this.selected.push(row);
+				}
+			}else{
+				if(this.selected === row) this.selected = null;
+				else this.selected = row;
+			}
+		},
+		columnWatches: [],
+		addTemplateIfNotInDocument: function(templateId){
+			/* copy template from content into shadow dom */
+			if(templateId && this.shadowRoot && !this.shadowRoot.getElementById(templateId)){
+				var t = this.querySelector('#'+templateId);
+				if(t) this.shadowRoot.appendChild(t);
+				else alert('Could not find template `' + templateId + '`');
+			}
+		},
+		rebuildColumns: function(){
+			if(this.columns.length === 0){
+				//try and load from DOM
+				var columnNodes = this.querySelectorAll('sortable-column');
+				var c = [];
+				var self = this;
+				if(this.columnObserver) this.columnObserver.disconnect();
+				this.columnObserver = new MutationObserver(function(mutations) {
+					mutations.forEach(function(m) {
+						var sortableColumn = null;
+						if(m.type === 'attributes' && m.target.nodeName === 'SORTABLE-COLUMN'){
+							sortableColumn = self.readSortableColumn.call(self, m.target, null);
+						}else if(m.type === "characterData"){
+							sortableColumn = self.readSortableColumn.call(self, m.target.parentNode, null);
+						}
+						if(sortableColumn){
+							var i = self.columns.findIndex(function(e){
+								return e.name === sortableColumn.name;
+							});
+							self.columns.splice(i, 1, sortableColumn);
+						}
+					});
+				});
+				if(columnNodes.length > 0){
+					[].forEach.call(columnNodes, function(n, index){
+						c.push(self.readSortableColumn.call(self, n, index));
+						self.columnObserver.observe(n, {
+							attributes: true,
+							subtree: true,
+							characterData: true
+						});
+					});
+					this.columns = c;
+					this.columnsChanged();
+				}else if(this.data !== null && this.data.length > 0){
+					var unique = [];
+					for(var i=0;i<this.data.length;i++){
+						Object.keys(this.data[i]).forEach(function(property) {
+							if (unique.indexOf(property) === -1) {
+								unique.push(property);
+								c.push({name: property, index: unique.length-1 });
+							}
+						});
+					}
+					this.columns = c;
+				}
+			}
+		},
+		readSortableColumn: function(n, index){
+			var name = n.getAttribute('name');
+			if(!name || name === '') name = index;
+			if(String(name).indexOf(' ') > -1) alert('Column name `'+name+'` contains an illegal character (` `)');
+			var title = n.getAttribute('title');
+			if(title === null){
+				title = n.textContent.trim();
+				if(title === '') title = name;
+			}
+			var sortable = n.getAttribute('sortable');
+			var formula = n.getAttribute('formula');
+			if(formula){
+				var match = formula.match(/function[^\(]*\(([^\)]*)\)[^\{]*{([^\}]*)\}/);
+				if (match) {
+					var args = match[1].split(',').map(function(arg) { return arg.replace(/\s+/, ''); });
+					formula = new Function(args, match[2]);
+				}else if(this[formula]){
+					//not an inlined function, assume it's a member of this
+					formula = this[formula]
+				}else if(PolymerExpressions.prototype[formula]){
+					//not an inlined function, or member of this, check PolymerExpressions.prototype
+					formula = PolymerExpressions.prototype[formula];
+				}else if(formula.substring(0,29) === 'PolymerExpressions.prototype.'){
+					var f = formula.substring(29);
+					formula = PolymerExpressions.prototype[f];
+					if(!formula) alert('Could not load formula `'+ formula +'` from PolymerExpressions.prototype for column `' + name + '`');
+				}else alert('Could not load formula `'+ formula +'` for column `' + name + '`');
+			}
+			return {
+				name: name,
+				index: index,
+				title: title,
+				formula: formula,
+				sortable: sortable,
+				datatype: n.getAttribute('datatype'),
+				cellTemplate: n.getAttribute('cellTemplate'),
+				headerTemplate: n.getAttribute('headerTemplate'),
+				footerTemplate: n.getAttribute('footerTemplate')
+			};
+		},
+		/**
+		 *	Change Observers
+		 */
+		argsChanged: function(oldValue,newValue){
+			var observer = new ObjectObserver(newValue);
+			var self = this;
+			observer.open(function(added, removed, changed, getOldValueFn) {
+				self.forceFooterRefresh++;
+				self.forceRefresh++;
+			});
+		},
+		columnsChanged: function(){
+			var self = this;
+			//explode columns if simple text array
+			if(self.columns.length > 0 && typeof self.columns[0] === 'string'){
+				self.columns = self.columns.map(function(column, index, array) {
+					return { name: column, index: index, title: column };
+				});
+			}
+			//watch templateIds since if added/modified we need to copy those templates into the shadow dom
+			function addTemplateWatches(column, field){
+				for(var i=0;i<self.columnWatches.length;i++){
+					if(self.columnWatches[i].object_ === column && self.columnWatches[i].path_[0] === field) return;
+				}
+				var observer = new PathObserver(c, field);
+				self.columnWatches.push(observer);
+				observer.open(function(added, removed, changed, getOldValueFn) {
+					self.columnsChanged();
+				});
+			}
+			for(var i=0;i<this.columns.length;i++){
+				var c = this.columns[i];
+				this.addTemplateIfNotInDocument(c.cellTemplate);
+				this.addTemplateIfNotInDocument(c.headerTemplate);
+				this.addTemplateIfNotInDocument(c.footerTemplate);
+				if(c.footerTemplate) this.showFooter = true;
+				addTemplateWatches(c,'cellTemplate');
+				addTemplateWatches(c,'headerTemplate');
+				addTemplateWatches(c,'footerTemplate');
+			}
+			if(this.dataSource) this.dataSource.columns = this.columns;
+			this.forceRefresh++;
+		},
+		rowSelectionChanged: function(a,val){
+			var table = this.shadowRoot.querySelector('tbody')
+			if(table){
+				if(val) table.classList.add('row-selection');
+				else table.classList.remove('row-selection');
+			}
+		},
+		multiSelectChanged: function(a,val){
+			if(val){
+				if(!this.isArray(this.selected)){
+					if(this.selected) this.selected = [this.selected];
+					else this.selected = [];
+				}
+			}else if(this.isArray(this.selected)){
+				if(this.selected.length > 0) this.selected = this.selected[0];
+				else this.selected = null;
+			}
+		},
+		selectedChanged: function(a,val){
+			if(val){
+				if(this.isArray(val)){
+					if(!this.multiSelect) this.multiSelect = true;
+				}else{
+					if(this.multiSelect) this.multiSelect = false;
+				}
+			}
+		},
+		sortColumnChanged: function(){ if(this.dataSource) this.dataSource.sortColumn = this.sortColumn; },
+		sortDescendingChanged: function(){ if(this.dataSource) this.dataSource.sortDescending = this.sortDescending; },
+		dataChanged: function(o,n){
+			if(n === null) this.data = [];
+			this.rebuildColumns();
+			this.pageSizeChanged();
+		},
+		cellTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
+		rowTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
+		headerTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); this.forceRefresh++; },
+		footerTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); this.forceRefresh++; },
+		rowEditorTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
+		pageSizeChanged: function(){
+			if(this.dataSource) this.dataSource.length = this.pageSize;
+			else if(this.data) this.dataSize = this.data.length;
+			this.lastPage = Math.max(1,Math.ceil(this.dataSize / this.pageSize));
+		},
+		pageChanged: function(){ if(this.dataSource) this.dataSource.start = (this.page - 1) * this.pageSize; },
+		/**
+		 *	Checkbox helper functions
+		 */
+		checkbox: false,
+		checkedbox: function(e,p){
+			var row = e.target.templateInstance.model.record.row;
+			this.toggleRowFromSelected(row);
+			e.preventDefault();
+		},
+		checkall: function(e,p){
+			if(e.target.checked){
+				for(var i=0;i<this.data.length;i++){
+					if(this.selected.indexOf(this.data[i]) === -1) this.selected.push(this.data[i]);
+				}
+			}else{
+				this.selected = [];
+			}
+		},
+		/**
+		 *	Template Functions
+		 */
+		changeSort: function(e,p){
+			if(!this.userSort && e.target.templateInstance.model.column &&
+			e.target.templateInstance.model.column.sortable !== false &&
+			e.target.templateInstance.model.column.sortable !== 'false'){
+				var clickedSortColumn = e.target.templateInstance.model.column.name;
+				if(clickedSortColumn === this.sortColumn){
+					//column already sorted, reverse sort
+					this.sortDescending = !this.sortDescending;
+				}else{
+					this.sortColumn = clickedSortColumn;
+				}
+			}
+		},
+		rowSelect: function(e,p){
+			if(this.rowSelection && e.target.templateInstance && e.target.nodeName !== 'INPUT'){
+				var model = e.target.templateInstance.model;
+				var row = model.row;
+				if(model.record) row = model.record.row;
+				this.toggleRowFromSelected(row);
+			}
+		},
+		updateColumnWidths: function(e,p){
+			var columns = this.shadowRoot.querySelectorAll('thead > tr > th');
+			[].forEach.call(columns, function(column){
+				if(column.templateInstance.model.column) column.templateInstance.model.column.width = column.clientWidth;
+			});
+		},
+		/**
+		 *	Expression Filters
+		 */
+		sortByKey: function(array, key, desc, columns, selected, pageSize, page, args, l) {
+			//ignore l, it is used to trigger observe.js watch only
+
+			var sortedArray;
+
+			var sortFunction = function(a, b) {
+				var x, y;
+				//determine if computed field
+				var formula = null;
+				for(var i=0;i<columns.length;i++){
+					if(columns[i].name === key){
+						formula = columns[i].formula;
+						break;
+					}
+				}
+				if(formula){
+					if(typeof a[key] === 'undefined'){
+						x = formula(a, args);
+						y = formula(b, args);
+					}else{
+						x = formula(a[key], a, args);
+						y = formula(b[key], b, args);
+					}
+				}else{
+					x = a[key];
+					y = b[key];
+				}
+				if(typeof x === 'undefined' || typeof y === 'undefined'){
+					//sort undefined after
+					if(typeof x === 'undefined'){
+						return !desc;
+					}else{
+						return desc;
+					}
+				}else{
+					if (typeof x === "string" && typeof y === "string"){
+						if(isNaN(x) || isNaN(y)){
+							x = x.toLowerCase();
+							y = y.toLowerCase();
+						}else{
+							x = +x;
+							y = +y;
+						}
+					}
+					if(desc){
+						return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+					}else{
+						return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+					}
+				}
+			};
+
+			if(!this.dataSource){
+				var checkColumnFilters = this.checkColumnFilters;
+				var filteredArray = array.filter(function(row){
+					return columns.every(function(column,columnIndex) { return checkColumnFilters(column,row); })
+				});
+				array = filteredArray;
+			}
+
+			if(key!==null && !this.dataSource && !this.userSort){
+				if(array.every(function(element, index) {
+					return (index + 1 >= array.length) || sortFunction(element, array[index+1])<=0;
+				})) sortedArray = array;
+				else sortedArray = array.sort(sortFunction);
+			}else sortedArray = array;
+
+			var records = [];
+			var isMultiSelect = this.isArray(selected);
+
+			if(page < 1) page = 1;
+
+			var start, end;
+
+			if(this.dataSource){
+				start = 0;
+				end = array.length;
+			}else{
+				start = (pageSize < Number.MAX_VALUE) ? Math.min(pageSize * (page - 1), sortedArray.length) : 0;
+				end = (pageSize < Number.MAX_VALUE) ? Math.min(start + +pageSize, sortedArray.length) : sortedArray.length;
+			}
+
+			var valueSelector = function(row,column){ return row[column.name]; };
+			if(sortedArray.length > 0 && this.isArray(sortedArray[0])) valueSelector = function(row,column){ return row[column.index]; };
+
+			for(var i=start;i<end;i++){
+				var row = sortedArray[i];
+				var isSelected = isMultiSelect ? selected.indexOf(row) > -1 : row === selected;
+				var isEditMode = this.editRow === row;
+				var isDirty = false;
+				var isInUndo = this.undoStack.filter(function(element){ return element.ref === row });
+				if(isInUndo.length>0) isDirty = this.rowHasBeenEdited(isInUndo[0]);
+				var fields = {};
+				columns.forEach(function(column, index, array) {
+					var value;
+					if(column.formula){
+						if(typeof row[column.name] !== 'undefined' || typeof row[column.index] !== 'undefined'){
+							value = column.formula(valueSelector(row, column), row, args);
+						} else value = column.formula(row, args);
+					}else{
+						value = valueSelector(row, column);
+					}
+					fields[column.name] = { value: value, row: row, column: column, sortColumn: key, args: args };
+				});
+				records.push({ selected: isSelected, editMode: isEditMode, dirty: isDirty, fields: fields, row: row });
+			}
+			return records;
+		},
+		selectProperty: function(objects, column, args) {
+			var arr = [];
+			var rowArr = [];
+			for(var i=0;i<objects.length;i++){
+				var row = objects[i];
+				var value;
+				if(column.formula){
+					if(typeof row[column.name] === 'undefined'){
+						value = column.formula(row, args);
+					}else{
+						value = column.formula(row[column.name], row, args);
+					}
+				}else{
+					value = row[column.name];
+				}
+				rowArr.push(row[column.name]);
+				arr.push(value);
+			}
+			return { values: arr, rowValues: rowArr, column: column, args: args };
+		},
+		naturalNumbers: function(n,mid){
+			var visible = 5;
+			var start,end;
+			if(mid !== null){
+				var range = Math.min(visible,n);
+				if(mid < range){
+					start = 1;
+					end = Math.min(mid+range,range);
+				}else if(mid > n - range + 1){
+					start = Math.max(n-range+1,1);
+					end = n;
+				}else{
+					start = Math.max(1, mid-Math.floor(range/2));
+					end = Math.min(n, mid+Math.floor((range-1)/2));
+				}
+			}else{
+				start = 1;
+				end = n;
+			}
+			var arr = [];
+			for(var i=start;i<=end;i++) arr.push(i);
+			return arr;
+		},
+		/**
+		  *	TODO: clean this up, it was put in to trigger a reprocess on initial load when templates are imported into the shadow dom.
+		  */
+		forceRefresh: 0,
+		forceFooterRefresh: 1,
+		refreshFooter: function(){
+			this.updateEditChanged();
+			this.forceFooterRefresh++;
+		}
+	}, columnDragMixin, rowDragMixin, rowFiltersMixin, rowEditorMixin));
+	//polyfills
+	if (!Array.prototype.findIndex) {
+		Array.prototype.findIndex = function(predicate) {
+			if (this == null) {
+				throw new TypeError('Array.prototype.find called on null or undefined');
+			}
+			if (typeof predicate !== 'function') {
+				throw new TypeError('predicate must be a function');
+			}
+			var list = Object(this);
+			var length = list.length >>> 0;
+			var thisArg = arguments[1];
+			var value;
+
+			for (var i = 0; i < length; i++) {
+			value = list[i];
+			if (predicate.call(thisArg, value, i, list)) {
+				return i;
+			}
+			}
+			return -1;
+		};
+	}
+</script>
+</polymer-element>

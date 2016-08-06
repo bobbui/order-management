@@ -1,0 +1,32 @@
+{
+  "name": "aha-table",
+  "version": "2.0.13",
+  "description": "Polymer Element for aha-table, a searchable, sortable, editable, selectable, paginatable, copyable, removeable, movable table/grid.",
+  "authors": [
+    "Louis Liu"
+  ],
+  "license": "MIT",
+  "main": "dist/aha-table.html",
+  "keywords": [
+    "polymer",
+    "web-components"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~1.2"
+  },
+  "homepage": "https://github.com/liuwenchao/aha-table",
+  "_release": "2.0.13",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.13",
+    "commit": "5d42bda2c03a6ac7c4723bc9b31b00937f7c87b3"
+  },
+  "_source": "https://github.com/liuwenchao/aha-table.git",
+  "_target": "^2.0.13",
+  "_originalSource": "aha-table"
+}

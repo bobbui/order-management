@@ -1,0 +1,601 @@
+.panel {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size:14px;
+	line-height:1.42857143;
+	color:#333;
+	margin-bottom:20px;
+	background-color:#fff;
+	border:1px solid transparent;
+	border-radius:4px;
+	-webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);
+	box-shadow:0 1px 1px rgba(0,0,0,.05);
+}
+.panel-default{
+	border-color:#ddd
+}
+.panel-heading{
+	padding:10px 15px;
+	border-bottom:1px solid transparent;
+	border-top-left-radius:3px;
+	border-top-right-radius:3px
+}
+.panel-default>.panel-heading{
+	color:#333;
+	background-color:#f5f5f5;
+	border-color:#ddd
+}
+.bootstrap::shadow {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size:14px;
+	line-height:1.42857143;
+	color:#333;
+}
+.bootstrap::shadow .btn{
+	display:inline-block;
+	padding:6px 12px;
+	margin-bottom:0;
+	font-size:14px;
+	font-weight:400;
+	line-height:1.42857143;
+	text-align:center;
+	white-space:nowrap;
+	vertical-align:middle;
+	cursor:pointer;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+	background-image:none;
+	border:1px solid transparent;
+	border-radius:4px
+}
+
+.bootstrap::shadow .btn:focus,
+.bootstrap::shadow .btn:active:focus,
+.bootstrap::shadow .btn.active:focus{
+	outline:thin dotted;
+	outline:5px auto -webkit-focus-ring-color;
+	outline-offset:-2px
+}
+
+.bootstrap::shadow .btn:hover,
+.bootstrap::shadow .btn:focus{
+	color:#333;
+	text-decoration:none
+}
+
+.bootstrap::shadow .btn:active,
+.bootstrap::shadow .btn.active{
+	background-image:none;
+	outline:0;
+	-webkit-box-shadow:inset 0 3px 5px rgba(0,0,0,.125);
+	box-shadow:inset 0 3px 5px rgba(0,0,0,.125)
+}
+
+.bootstrap::shadow .btn.disabled,
+.bootstrap::shadow .btn[disabled=""],
+.bootstrap::shadow [role="button"][disabled=""],
+.bootstrap::shadow [role="button"].disabled {
+	cursor: not-allowed;
+	filter: alpha(opacity=65) grayscale(100%);
+	-webkit-box-shadow:none;
+	box-shadow:none;
+	opacity:.65;
+	-webkit-filter: grayscale(100%);
+}
+.bootstrap::shadow .btn-primary{
+	color:#fff;
+	background-color:#428bca;
+	border-color:#357ebd
+}
+
+.bootstrap::shadow .btn-primary:hover,
+.bootstrap::shadow .btn-primary:focus,
+.bootstrap::shadow .btn-primary:active,
+.bootstrap::shadow .btn-primary.active,
+.bootstrap::shadow .open>.dropdown-toggle.btn-primary{
+	color:#fff;
+	background-color:#3071a9;
+	border-color:#285e8e
+}
+
+.bootstrap::shadow .btn-primary:active,
+.bootstrap::shadow .btn-primary.active,
+.bootstrap::shadow .open>.dropdown-toggle.btn-primary{
+	background-image:none
+}
+
+.bootstrap::shadow .btn-primary.disabled,
+.bootstrap::shadow .btn-primary[disabled],
+.bootstrap::shadow .btn-primary.disabled:hover,
+.bootstrap::shadow .btn-primary[disabled]:hover,
+.bootstrap::shadow .btn-primary.disabled:focus,
+.bootstrap::shadow .btn-primary[disabled]:focus,
+.bootstrap::shadow .btn-primary.disabled:active,
+.bootstrap::shadow .btn-primary[disabled]:active,
+.bootstrap::shadow .btn-primary.disabled.active,
+.bootstrap::shadow .btn-primary[disabled].active {
+	background-color:#428bca;
+	border-color:#357ebd
+}
+
+.bootstrap::shadow .btn-default{
+	color:#333;
+	background-color:#fff;
+	border-color:#ccc
+}
+
+.bootstrap::shadow .btn-default:hover,
+.bootstrap::shadow .btn-default:focus,
+.bootstrap::shadow .btn-default:active,
+.bootstrap::shadow .btn-default.active {
+	color:#333;
+	background-color:#e6e6e6;
+	border-color:#adadad
+}
+
+.bootstrap::shadow .btn-default:active,
+.bootstrap::shadow .btn-default.active {
+	background-image:none
+}
+
+.bootstrap::shadow .btn-default.disabled,
+.bootstrap::shadow .btn-default[disabled],
+.bootstrap::shadow .btn-default.disabled:hover,
+.bootstrap::shadow .btn-default[disabled]:hover,
+.bootstrap::shadow .btn-default.disabled:focus,
+.bootstrap::shadow .btn-default[disabled]:focus,
+.bootstrap::shadow .btn-default.disabled:active,
+.bootstrap::shadow .btn-default[disabled]:active,
+.bootstrap::shadow .btn-default.disabled.active,
+.bootstrap::shadow .btn-default[disabled].active {
+	background-color:#fff;
+	border-color:#ccc
+}
+
+.bootstrap::shadow .btn-sm {
+	padding:5px 10px;
+	font-size:12px;
+	line-height:1.5;
+	border-radius:3px;
+}
+
+.bootstrap::shadow .btn-group,
+.bootstrap::shadow .btn-group-vertical{
+	position:relative;
+	display:inline-block;
+	vertical-align:middle
+}
+
+.bootstrap::shadow .btn-group>.btn,
+.bootstrap::shadow .btn-group-vertical>.btn{
+	position:relative;
+	float:left;
+}
+
+.bootstrap::shadow .btn-group>.btn:hover,
+.bootstrap::shadow .btn-group-vertical>.btn:hover,
+.bootstrap::shadow .btn-group>.btn:focus,
+.bootstrap::shadow .btn-group-vertical>.btn:focus,
+.bootstrap::shadow .btn-group>.btn:active,
+.bootstrap::shadow .btn-group-vertical>.btn:active,
+.bootstrap::shadow .btn-group>.btn.active,
+.bootstrap::shadow .btn-group-vertical>.btn.active{
+	z-index:2
+}
+
+.bootstrap::shadow .btn-group>.btn:focus,
+.bootstrap::shadow .btn-group-vertical>.btn:focus{
+	outline:0
+}
+
+.bootstrap::shadow .btn-group .btn+.btn,
+.bootstrap::shadow .btn-group .btn+.btn-group,
+.bootstrap::shadow .btn-group .btn-group+.btn,
+.bootstrap::shadow .btn-group .btn-group+.btn-group{
+	margin-left:-1px
+}
+
+.bootstrap::shadow .btn-group>.btn:not(:first-child):not(:last-child):not(.dropdown-toggle){
+	border-radius:0
+}
+
+.bootstrap::shadow .btn-group>.btn:first-child{
+	margin-left:0
+}
+
+.bootstrap::shadow .btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle){
+	border-top-right-radius:0;
+	border-bottom-right-radius:0
+}
+
+.bootstrap::shadow .btn-group>.btn:last-child:not(:first-child),.btn-group>.dropdown-toggle:not(:first-child){
+	border-top-left-radius:0;
+	border-bottom-left-radius:0
+}
+
+.bootstrap::shadow .btn-group>.btn-group{
+	float:left
+}
+
+.bootstrap::shadow .btn-group>.btn-group:not(:first-child):not(:last-child)>.btn{
+	border-radius:0
+}
+
+.bootstrap::shadow .btn-group>.btn-group:first-child>.btn:last-child,.btn-group>.btn-group:first-child>.dropdown-toggle{
+	border-top-right-radius:0;
+	border-bottom-right-radius:0
+}
+
+.bootstrap::shadow .btn-group>.btn-group:last-child>.btn:first-child{
+	border-top-left-radius:0;
+	border-bottom-left-radius:0
+}
+
+.bootstrap::shadow .form-control{
+	box-sizing: border-box;
+	display:inline-block;
+	width:100%;
+	height:32px;
+	padding:6px 12px;
+	font-size:14px;
+	color:#555;
+	background-color:#fff;
+	background-image:none;
+	border:1px solid #ccc;
+	border-radius:4px;
+	-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075);
+	box-shadow:inset 0 1px 1px rgba(0,0,0,.075);
+	-webkit-transition:border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+	-o-transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s
+}
+
+.bootstrap::shadow .form-control:focus{
+	border-color:#66afe9;
+	outline:0;
+	-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+	box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+}
+
+.bootstrap::shadow .form-control::-moz-placeholder,
+.bootstrap::shadow .form-control:-ms-input-placeholder,
+.bootstrap::shadow .form-control::-webkit-input-placeholder {
+	color:#777
+}
+
+.bootstrap::shadow .form-control[disabled],
+.bootstrap::shadow .form-control[readonly] {
+	cursor:not-allowed;
+	background-color:#eee;
+}
+
+.bootstrap::shadow .form-control-feedback {
+	position:absolute;
+	top:0px;
+	right:0;
+	z-index:2;
+	display:block;
+	/*width:32px;*/
+	width:70px;
+	height:18px;
+	line-height:34px;
+	text-align:center;
+}
+.bootstrap::shadow .form-control-feedback button {
+	vertical-align: baseline;
+	padding: 0px 4px;
+}
+.bootstrap::shadow .has-feedback{
+	position:relative
+}
+
+.bootstrap::shadow .has-feedback .form-control{
+	/*padding-right:42.5px*/
+	padding-right:70px;
+	display:inline-block;
+}
+
+.bootstrap::shadow input,
+.bootstrap::shadow button,
+.bootstrap::shadow select,
+.bootstrap::shadow textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+.bootstrap::shadow tbody tr:nth-child(odd) {
+	background-color:#fefefe;
+}
+
+.bootstrap::shadow > table > tbody > tr:hover {
+	background-color:#f5f5f5;
+}
+
+.bootstrap::shadow .pagination {
+	display:inline-block;
+	padding-left:0;
+	margin: 0;
+	border-radius:4px;
+}
+
+.bootstrap::shadow .pagination > li {
+	display:inline;
+}
+
+.bootstrap::shadow .pagination > li > a,
+.bootstrap::shadow .pagination > li > span {
+	position:relative;
+	float:left;
+	padding:6px;
+	text-align:center;
+	margin-left:-1px;
+	line-height:1.42857143;
+	color:#428bca;
+	text-decoration:none;
+	background-color:#fff;
+	border:1px solid #ddd;
+	min-width:40px;
+	box-sizing: border-box;
+}
+
+.bootstrap::shadow .pagination > li:first-child > a,
+.bootstrap::shadow .pagination > li:first-child > span {
+	margin-left:0;
+	border-top-left-radius:4px;
+	border-bottom-left-radius:4px;
+}
+
+.bootstrap::shadow .pagination > li:last-child > a,
+.bootstrap::shadow .pagination > li:last-child > span {
+	border-top-right-radius:4px;
+	border-bottom-right-radius:4px;
+}
+
+.bootstrap::shadow .pagination > li > a:hover,.pagination > li > span:hover,
+.bootstrap::shadow .pagination > li > a:focus,.pagination > li > span:focus {
+	color:#2a6496;
+	background-color:#eee;
+	border-color:#ddd;
+}
+
+.bootstrap::shadow .pagination > .active > a,.pagination > .active > span,
+.bootstrap::shadow .pagination > .active > a:hover,.pagination > .active > span:hover,
+.bootstrap::shadow .pagination > .active > a:focus,.pagination > .active > span:focus {
+	z-index:2;
+	color:#fff;
+	cursor:default;
+	background-color:#428bca;
+	border-color:#428bca;
+}
+
+.bootstrap::shadow .pagination > .disabled > span,
+.bootstrap::shadow .pagination > .disabled > span:hover,
+.bootstrap::shadow .pagination > .disabled > span:focus,.pagination > .disabled > a,
+.bootstrap::shadow .pagination > .disabled > a:hover,
+.bootstrap::shadow .pagination > .disabled > a:focus {
+	color:#777;
+	cursor:not-allowed;
+	background-color:#fff;
+	border-color:#ddd;
+}
+
+.bootstrap::shadow .pagination-lg > li > a,
+.bootstrap::shadow .pagination-lg > li > span {
+	padding:10px 16px;
+	font-size:18px;
+}
+
+.bootstrap::shadow .pagination-lg > li:first-child > a,
+.bootstrap::shadow .pagination-lg > li:first-child > span {
+	border-top-left-radius:6px;
+	border-bottom-left-radius:6px;
+}
+
+.bootstrap::shadow .pagination-lg > li:last-child > a,
+.bootstrap::shadow .pagination-lg > li:last-child > span {
+	border-top-right-radius:6px;
+	border-bottom-right-radius:6px;
+}
+
+.bootstrap::shadow .pagination-sm > li > a,
+.bootstrap::shadow .pagination-sm > li > span {
+	padding:5px 10px;
+	font-size:12px;
+}
+
+.bootstrap::shadow .pagination-sm > li:first-child > a,
+.bootstrap::shadow .pagination-sm > li:first-child > span {
+	border-top-left-radius:3px;
+	border-bottom-left-radius:3px;
+}
+
+.bootstrap::shadow .pagination-sm > li:last-child > a,
+.bootstrap::shadow .pagination-sm > li:last-child > span {
+	border-top-right-radius:3px;
+	border-bottom-right-radius:3px;
+}
+
+.bootstrap::shadow th {
+	text-align:left;
+}
+
+.bootstrap::shadow > table {
+	width:100%;
+	max-width:100%;
+}
+
+.bootstrap::shadow > table > thead > tr > th,
+.bootstrap::shadow > table > tbody > tr > th,
+.bootstrap::shadow > table > thead > tr > td,
+.bootstrap::shadow > table > tbody > tr > td,
+.bootstrap::shadow > table > tfoot > tr > td {
+	padding:8px;
+	line-height:1.42857143;
+	vertical-align:top;
+	border-top:1px solid #ddd;
+}
+.bootstrap::shadow > table > tfoot > tr > th,
+.bootstrap::shadow > table > tfoot > tr > td {
+	line-height:1.42857143;
+	border-top:1px solid #ddd;
+}
+
+.bootstrap::shadow > table > thead > tr > th {
+	vertical-align:bottom;
+	border-bottom:2px solid #ddd;
+}
+.bootstrap::shadow > table > thead > tr > th,
+.bootstrap::shadow > table > tfoot > tr.footercells > td {
+	font-weight: 700;
+}
+
+.bootstrap::shadow > table > caption+thead > tr:first-child > th,
+.bootstrap::shadow > table > colgroup+thead > tr:first-child > th,
+.bootstrap::shadow > table > thead:first-child > tr:first-child > th,
+.bootstrap::shadow > table > caption+thead > tr:first-child > td,
+.bootstrap::shadow > table > colgroup+thead > tr:first-child > td,
+.bootstrap::shadow > table > thead:first-child > tr:first-child > td {
+	border-top:0;
+}
+.bootstrap::shadow > table > tbody+tbody {
+	border-top:2px solid #ddd;
+}
+.bootstrap::shadow tbody tr.selected-row {
+/*	background-color: #428BCA !important;
+	color: white !important;*/
+	background-color: #DFF0D8;
+}
+.bootstrap::shadow thead th.column-move-right {
+	background-color: #D9EDF7;
+}
+.bootstrap::shadow thead th.column-move-left {
+	background-color: #D9EDF7;
+}
+.bootstrap::shadow thead th.column-in-move {
+	background-color: #F2DEDE;
+}
+.bootstrap::shadow .checkbox-column {
+	vertical-align: middle;
+}
+.bootstrap::shadow .sortable-table thead th.sorted-column-asc::after {
+	content: '▲';
+	position: absolute;
+}
+.bootstrap::shadow .sortable-table thead th.sorted-column-desc::after {
+	content: '▼';
+	position: absolute;
+}
+.bootstrap::shadow tbody tr.editor-row {
+	background-color: #FCF8E3;
+}
+.bootstrap::shadow .infinitePager > .loading {
+	border-radius: 4px;
+	line-height:28px;
+	color:#fff;
+	text-align:center;
+	background-color:#428bca;
+	-webkit-box-shadow:inset 0 -1px 0 rgba(0,0,0,.15);
+	box-shadow:inset 0 -1px 0 rgba(0,0,0,.15);
+	-webkit-transition:width .6s ease;
+	-o-transition:width .6s ease;
+	background-image:-webkit-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+	background-image:-o-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+	background-image:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+	-webkit-background-size:40px 40px;
+	background-size:40px 40px;
+	-webkit-animation: progress-bar-stripes 2s linear infinite;
+	-o-animation: progress-bar-stripes 2s linear infinite;
+	animation: progress-bar-stripes 2s linear infinite;
+}
+.bootstrap::shadow .infinitePager > .more {
+	text-align: center;
+	width: 100%;
+	cursor: pointer;
+	line-height:14px;
+}
+.bootstrap::shadow table.articlePager td:nth-of-type(2) {
+	padding-left: 10px;
+}
+.bootstrap::shadow .simplePager > span:nth-of-type(2) {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+.bootstrap::shadow .indexedPager {
+	height: 34px;
+}
+.bootstrap::shadow .indexedPager > ul > li:first-of-type a:after,
+.bootstrap::shadow .defaultPager > div:nth-of-type(1) > button:nth-of-type(1):after {
+	content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAGcSURBVDjLxVM7SEJRGP5vmVfpAWGFERJUONQWLtEQOUQRbUK09IDW1mp1KKPBsdGlWqKIqGiLoq0aggqxraFARMpX95535xxCNLouDh04cM7//3yvwzGEEFDPaoA6l6vyEj3MaDmcc0CMX23NdY9X9iPxlxijsHK8GmxxUMAh1O+BAb8bEKZVnZntVMyisFYiotnRgkU4UMaByC0Hy/XpzWQ80GGuTwy1GUULO1tQrIQJQBLIsriuTW4kE71d3qWg3wNM9gqIOYeoWDHlGuALYQhHn/cCPnNpsMeEjyIBW9bzP8B/KlCsSAJ4TQNyiI0M97WaPe1NkM4TyJco+FpcQC3irECxYsVuM/iyaBFTplltzHU+6sx/KagCKCDlX0A6R5TXp5O77NHl4wd43QYYoOwJEAg7A6iEEZHsMijpVbzuhCLPqdzBzcMnNHsadT7CZrUUMB2gjVnZ6/v+6GzqMbt7e5/V+fBaIaqEbfUKEqByMH0enu8cu+AE0QVBqDOAYk2cvUmfUiqrHsxcTy36QqcE3K7lyrrx77/xG/TSBY2ALCinAAAAAElFTkSuQmCC);
+	display: block;
+	margin-top: 2px;
+	height: 18px;
+}
+.bootstrap::shadow .simplePager > button:nth-of-type(1):after,
+.bootstrap::shadow .defaultPager > div:nth-of-type(1) > button:nth-of-type(2):after {
+	content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAEXSURBVDjLY/j//z8DJZiBLgZkz37Ynjrz4ReyDEideb89afrDf5ET7v4n2YCEqXf7qpY9/T9r76v/Xu03STMgasLteaVLHv+fufvl/6k7X/y3qrlCvAHBvTeXFC54ANbctv7p/95Nz/5rFZ0nzoCAzpuPsuc++D91x4v/jasf/y9aeP9/89rH/6VTTxJngGPDtc3xU+/879789H/5kgf/02fd+V+17OF/yZhjxBmgVXCaRT3v7BqP1mv/a1Y+/J824/b/woX3/osHHSAtECVjjqy0Lb/wP2/+3f+Zs+/8F3XfS3o0inntXWSeffJ/0tRb/0Ucdv4nKyEJW25ZYBh/5L+w5fb/ZCdlQYMNs4WMt/wfuMyEDwMA0Irn/pDRT58AAAAASUVORK5CYII=);
+	display: block;
+	margin-top: 2px;
+	height: 18px;
+}
+.bootstrap::shadow .simplePager > button:nth-of-type(2):after,
+.bootstrap::shadow .defaultPager > div:nth-of-type(2) > button:nth-of-type(1):after {
+	content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAEdSURBVDjLY/j//z8DJZiB6gY0rH7xpW7li3YKDHj1v2bli38lix61k2VA5fJn/9eeeP+/fcOL/wlT7/aRbEDegkf/Vxx/93/xobf/S5c8/u/ecm0eSQYkTX/4f+HBN/8nbX/xf+bul/8Tp9/9r1N0dgnRBgT33QZqfPW/YdXj/42rH//v2vjkv3fHtf9SScceEWWAc8u1/xO2Pv9fsvjB//IlD4CGPPrvXH/5v2Tksc1EGWBaful/+/on/4sW3gfGxsP/9lUX/ksEH1gj6rqdhSgDlPPO/q9b8fB/5bIH/23LL/wXD9i7kqRAlEo6+b908f3/NiXn/4t57V1EcjRKRB75b1145r+o684FZCUkMb8D/0Uct88euMxEKgYA7Ojrv4CgE7EAAAAASUVORK5CYII=);
+	display: block;
+	margin-top: 2px;
+	height: 18px;
+}
+.bootstrap::shadow .indexedPager > ul > li:last-of-type a:after,
+.bootstrap::shadow .defaultPager > div:nth-of-type(2) > button:nth-of-type(2):after {
+	content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAGeSURBVDjLxZO/axRRFIW/N7o7CZIIKhosAoIIopWNqEX0L7ARG0EU0V4UVLBJJVjY2FgsgiykCOY/SIw2tgHJqEELUUzQJpudcd/c9+M+ixBYhNkmhae7X3E498AxKSV2o4xdau/wMfv6V6XK89mrRx4N8zud78ve6UXxivjAwv0TpinBvqg8uNf98WQYWqucmh7j0ukJSknNL1ivnDmWm8OT7Ye3Xnx7tsMH4hAfcV6prGs2EBdQYPpgm6n97buXn669BCglYV1CvFJKbO7gj0+4oPRt5PhUi02b3zz/+EMbDLUbo24Z+labDaxVJCi9QSAzcPLoOC24tlj0ZHI8Q3wkWN9sMBCH80rtInsMZCZRB6USrco65hmgoxKUkhCfIEGeG94WW6x87S+QOPR7080cmGiRZESJld1uO28Zllb7rKz15n92zl5Rq0kk4oKS6jgqQUS88q7oUXwpu+vdc9cBkjiC2+5n5At9qywXPT593nq1Pnfhxg5PdcR7xUcl+dBsEKzn42rZ2ZifuT3M1Srv32yQgvLv+Mx/X+Nfknb5JPA+HGwAAAAASUVORK5CYII=);
+	display: block;
+	margin-top: 2px;
+	height: 18px;
+}
+.bootstrap::shadow .dropdown-menu {
+	position:absolute;
+	top:100%;
+	left:0;
+	z-index:1000;
+	display:none;
+	float:left;
+	min-width:160px;
+	padding: 4px;
+	margin:2px 0 0;
+	font-size:14px;
+	text-align:left;
+	list-style:none;
+	background-color:#fff;
+	-webkit-background-clip:padding-box;
+	background-clip:padding-box;
+	border:1px solid #ccc;
+	border:1px solid rgba(0,0,0,.15);
+	border-radius:4px;
+	-webkit-box-shadow:0 6px 12px rgba(0,0,0,.175);
+	box-shadow:0 6px 12px rgba(0,0,0,.175);
+}
+.bootstrap::shadow .open > .dropdown-menu {
+    display: block;
+}
+.bootstrap::shadow .dropdown-menu .divider {
+    height: 1px;
+    margin: 9px 0px;
+    overflow: hidden;
+    background-color: #E5E5E5;
+}
+.bootstrap::shadow th .btn {
+	padding: 0;
+	width: 24px;
+	height: 24px;
+	border-color: transparent;
+}
+.bootstrap::shadow th .btn:hover,
+.bootstrap::shadow th .btn:active,
+.bootstrap::shadow th .btn:focus {
+	border-color: #CCC;
+}
+.bootstrap::shadow th .open > .btn {
+	border-color: #CCC;
+	background-color: #E6E6E6;
+}

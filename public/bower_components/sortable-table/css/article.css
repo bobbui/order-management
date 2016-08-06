@@ -1,0 +1,182 @@
+.article::shadow > table > tbody > tr > td { 
+	vertical-align: top;
+}
+.article::shadow > table > tbody > tr.selected-row {
+	background-color: #f7f1e8;
+}
+.article::shadow > table > tbody > tr:hover { 
+	background-color: #f7f7f7;
+}
+.article::shadow > table > thead {
+	display: table-caption;
+}
+.article::shadow > table > tfoot > tr > td > table.articlePager {
+	color: #777;
+	border-collapse: collapse;
+}
+.article::shadow > table > thead > tr {
+	width: 100%;
+	display: table;
+	cursor: pointer;
+	border-top:1px solid transparent;
+}
+.article::shadow .simplePager > span:nth-of-type(2) {
+	padding-left: 6px;
+	padding-right: 6px;
+}
+.article::shadow > table > thead > tr > th,
+.article::shadow > table > tfoot > tr > td > table.articlePager td,
+.article::shadow .infinitePager,
+.article::shadow .defaultPager,
+.article::shadow .simplePager,
+.article::shadow .indexedPager {
+	border-color: #ccc;
+	border-style: solid;
+	color: #777;
+}
+.article::shadow > table > thead > tr > th {
+	border-width: 0 0 1px 0;
+}
+.article::shadow > table > thead > tr > th:not(.checkbox-column),
+.article::shadow > table > tfoot > tr > td > table.articlePager td,
+.article::shadow .indexedPager > ul {
+	padding: 0 20px 5px;
+	white-space: nowrap;
+	height: 40px;
+	vertical-align: bottom;
+}
+.article::shadow > table > tfoot > tr > td > table.articlePager td,
+.article::shadow .defaultPager,
+.article::shadow .simplePager,
+.article::shadow .indexedPager {
+	border-width: 1px 0 0 0;
+	height: 25px;
+	vertical-align: top;
+	padding-top: 5px;
+}
+.article::shadow > table > thead > tr > th.checkbox-column {
+	padding: 0 0 6px 8px;
+	vertical-align: bottom;
+}
+.article::shadow > table > thead > tr > th:hover,
+.article::shadow > table > tfoot > tr > td > table.articlePager td:first-of-type:hover,
+.article::shadow .infinitePager button:hover,
+.article::shadow .indexedPager li:not(.disabled) a:hover {
+	color: #d38b28;
+}
+.article::shadow > table > thead > tr > th.sorted-column-asc,
+.article::shadow > table > thead > tr > th.sorted-column-desc,
+.article::shadow > table > tfoot > tr > td > table.articlePager td:first-of-type,
+.article::shadow .indexedPager > ul > li.active > a {
+	border-width: 1px 1px 0 1px;
+	padding: 0px 30px;
+	vertical-align: middle;
+	color: #333;
+}
+.article::shadow > table > tfoot > tr > td > table.articlePager td:first-of-type {
+	border-width: 0 1px 1px 1px;
+	font-weight: 700;
+}
+.article::shadow > table > tfoot > tr > td > table.articlePager td:nth-of-type(3) {
+	font-weight: 700;
+	padding-right: 4px;
+}
+.article::shadow > table > tfoot > tr > td > table.articlePager td select,
+.article::shadow .defaultPager > div > button,
+.article::shadow .simplePager > button,
+.article::shadow .indexedPager > ul > li > a {
+	font: inherit;
+	-webkit-appearance: none;
+	border: 1px solid #ccc;
+	color: #333;
+	font-size: 16px;
+	background-color: inherit;
+}
+.article::shadow > table > tfoot > tr > td > table.articlePager td select:hover,
+.article::shadow > table > tfoot > tr > td > table.articlePager td select:active,
+.article::shadow > table > tfoot > tr > td > table.articlePager td select:focus,
+.article::shadow .defaultPager > div > button:not([disabled=""]):hover,
+.article::shadow .defaultPager > div > button:not([disabled=""]):active,
+.article::shadow .defaultPager > div > button:not([disabled=""]):focus,
+.article::shadow .simplePager > button:not([disabled=""]):hover,
+.article::shadow .simplePager > button:not([disabled=""]):active,
+.article::shadow .simplePager > button:not([disabled=""]):focus,
+.article::shadow .indexedPager > ul > li > a:not([disabled=""]):hover,
+.article::shadow .indexedPager > ul > li > a:not([disabled=""]):active,
+.article::shadow .indexedPager > ul > li > a:not([disabled=""]):focus {
+	color: #d38b28;
+}
+.article::shadow > table > thead > tr > th.column-0.sorted-column-asc,
+.article::shadow > table > thead > tr > th.column-0.sorted-column-desc {
+	border-width: 0 0 1px 0;
+	padding: 0 20px 5px;
+	vertical-align: bottom;
+}
+.article::shadow > table > thead > tr > th.column-0 {
+	width: 100%;
+	text-align: left;
+}
+.article::shadow .infinitePager,
+.article::shadow .indexedPager {
+	width: 100%;
+	text-align: center;
+	border-width: 1px 0 0 0;
+	padding-top: 4px;
+	font-size: 16px;
+	font-family: inherit;
+}
+.article::shadow .infinitePager button,
+.article::shadow .indexedPager > ul > li > a {
+	border: none;
+	background-color: transparent;
+	font-size: 16px;
+	font-weight: 700;
+	color: #777;
+	font-family: inherit;
+	outline: 0;
+	cursor: pointer;
+}
+.article::shadow .indexedPager > ul > li.disabled > a,
+.article::shadow .indexedPager > ul > li.active > a {
+	cursor: inherit;
+}
+.article::shadow .indexedPager > ul > li > a {
+	text-decoration: none;
+}
+.article::shadow .indexedPager > ul {
+	margin: 0;
+}
+.article::shadow .indexedPager > ul > li {
+	padding: 0 6px;
+	display:inline-block;
+	height: 10px;
+}
+.article::shadow .indexedPager > ul > li.active {
+	vertical-align: bottom;
+}
+.article::shadow .indexedPager > ul > li:first-of-type a:after,
+.article::shadow .defaultPager > div:nth-of-type(1) > button:nth-of-type(1):after {
+	content: 'First';
+}
+.article::shadow .simplePager > button:nth-of-type(1):after,
+.article::shadow .defaultPager > div:nth-of-type(1) > button:nth-of-type(2):after {
+	content: 'Previous';
+}
+.article::shadow .simplePager > button:nth-of-type(2):after,
+.article::shadow .defaultPager > div:nth-of-type(2) > button:nth-of-type(1):after {
+	content: 'Next';
+}
+.article::shadow .indexedPager > ul > li:last-of-type a:after,
+.article::shadow .defaultPager > div:nth-of-type(2) > button:nth-of-type(2):after {
+	content: 'Last';
+}
+.article::shadow .defaultPager > div > button,
+.article::shadow .simplePager > button,
+.article::shadow .indexedPager > ul > li > a {
+	padding: 0;
+	min-width: 90px;
+	border: none;
+	background-color: inherit;
+	font-weight: 700;
+	outline: none;
+}
