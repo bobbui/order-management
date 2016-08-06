@@ -1,2 +1,4 @@
 node_modules
-bower_components
+public\bower_components\*.md
+public\bower_components\*\test\*
+public\bower_components\*\demo\*
