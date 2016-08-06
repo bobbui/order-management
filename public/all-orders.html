@@ -1,0 +1,41 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="all-orders">
+    <style>
+    </style>
+    <template>
+        <h2 id="event-listeners" class="has-permalink">All orders</h2>
+        <iron-ajax
+                auto
+                url="/rest/v1.0/order"
+                handle-as="json"
+                last-response="{{orders}}"></iron-ajax>
+        <paper-datatable data="{{orders}}" id="orderItemTables">
+            <paper-datatable-column header="Drink" property="type" type="String"
+                                    sortable></paper-datatable-column>
+            <paper-datatable-column header="Size" property="size" type="String" align="right" sortable
+            ></paper-datatable-column>
+            <paper-datatable-column header="Unit Price" property="unitPrice" type="Number" align="right"
+                                    sortable></paper-datatable-column>
+            <paper-datatable-column header="Qty" property="quantity" type="Number" align="right"
+                                    sortable></paper-datatable-column>
+            <paper-datatable-column header="Amount" property="amount" type="Number" align="right"
+                                    sortable></paper-datatable-column>
+            <paper-datatable-column header="Datetime" property="time" type="Date" align="right" sortable
+            ></paper-datatable-column>
+        </paper-datatable>
+    </template>
+    <script>
+        "useStrict"
+        Polymer({
+            is: 'all-orders',
+            ready: function () {
+                console.log("ready");
+            },
+            created: function () {
+                console.log("created");
+            },
+        })
+        ;
+    </script>
+</dom-module>

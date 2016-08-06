@@ -1,0 +1,29 @@
+<header>
+    <h1>Order Management</h1>
+</header>
+
+<paper-menu class="list" on-iron-select="onMenuSelect">
+    <a data-route="home" href="/" active="">
+        <iron-icon icon="icons:add-shopping-cart"></iron-icon>
+        <span>Ađ new order</span>
+    </a>
+    <a data-route="home" href="/">
+        <iron-icon icon="icons:list"></iron-icon>
+        <span>All orders</span>
+    </a>
+
+    <a data-route="node" href="node/hot">
+        <iron-icon icon="book"></iron-icon>
+        <span>Order by types</span>
+    </a>
+</paper-menu>
+
+<iron-label>
+    Type of Drink
+</iron-label>
+<iron-selector id="drink_type" items="{{types}}" on-tap="_typeSelected">
+</iron-selector>
+<iron-label>
+    Quantity
+</iron-label>
+<paper-input label="quantity" type="number" id="quantity" value="{{quantity}}"></paper-input>

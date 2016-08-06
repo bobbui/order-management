@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <link rel="import" href="/bower_components/polymer/polymer.html">
+
+    <link rel="import" href="/bower_components/iron-component-page/iron-component-page.html">
+    <link rel="import" href="/bower_components/iron-icon/iron-icon.html">
+    <link rel="import" href="/bower_components/paper-header-panel/paper-header-panel.html">
+    <link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
+    <link rel="import" href="/bower_components/paper-item/paper-item.html">
+    <link rel="import" href="/bower_components/paper-input/paper-input.html">
+    <link rel="import" href="/bower_components/paper-material/paper-material.html">
+    <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+    <link rel="import" href="/bower_components/paper-fab/paper-fab.html">
+    <link rel="import" href="/bower_components/iron-selector/iron-selector.html">
+
+    <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
+    <style is="custom-style">
+
+        iron-selector > * {
+            padding: 8px;
+        }
+
+        .horizontal-section {
+            padding: 0;
+        }
+
+        .iron-selected {
+            background-color: var(--google-blue-500);
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+<template is="dom-bind" id="app">
+
+    {{{body}}}
+</template>
+<script src="/javascripts/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<style is="custom-style">
+#themed::shadow table{
+  color: #333;
+  border-spacing: 0;
+  border-collapse: collapse;
+  font-size: 14px;
+  border: 1px solid #a0cfef;
+}
+#themed::shadow .pagination table,
+#themed::shadow .pagination tr,
+#themed::shadow .pagination td{
+  border: 0;
+}
+#themed::shadow th.sortable,
+#themed::shadow .rows td {
+  white-space: nowrap;
+  padding: 8px 5px;
+  border: 1px solid #a0cfef;
+}
+#themed::shadow tbody tr.rows:hover,
+#themed::shadow .rows.selected {
+  background-color: #f3f3f3;
+  color: #1B8CCD;
+}
+#themed::shadow tbody tr.rows.editing {
+  background-color: #fbec88;
+  border: 1px solid #fad42e;
+}
+#themed::shadow th.searchable input,
+#themed::shadow th.searchable select {
+  width: 90%;
+}
+#themed::shadow th {
+  border: 1px solid #a0cfef;
+  background: #c3e2f6;
+  color: #2e6e9e;
+  font-weight: bold;
+}
+#themed::shadow sup {
+  color:yellow;
+}
+#themed::shadow .search-head input {
+  width: 40px;
+  min-width: 90%;
+}
+#themed::shadow .paging {
+  display: block;
+  float: left;
+}
+#themed::shadow .pagesize {
+  display: block;
+  float: left;
+}
+#themed::shadow .summary {
+  display: block;
+  float: right;
+}
+#themed::shadow tfoot td {
+  background-color: #eee;
+}
+#themed::shadow .hint,
+#themed::shadow .search,
+#themed::shadow .nosearch,
+#themed::shadow .copy-er i,
+#themed::shadow .move-down-er i,
+#themed::shadow .move-up-er i,
+#themed::shadow .remove-er i
+ {
+  border: 0;
+  display: inline-block;
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-width: 15px;
+  min-height: 20px;
+}
+#themed::shadow .hint:before {
+  content:"\f05a";
+}
+#themed::shadow .search:before {
+  content:"\f00e";
+}
+#themed::shadow .nosearch:before {
+  content:"\f010";
+}
+#themed::shadow .copy-er i:before {
+  content:"\f0c5";
+}
+#themed::shadow .remove-er i:before {
+  content:"\f014";
+}
+#themed::shadow .move-down-er i:before {
+  content:"\f063";
+}
+#themed::shadow .move-up-er i:before {
+  content:"\f062";
+}
+</style>
