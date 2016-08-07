@@ -1,13 +1,11 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
-
 <dom-module id="add-order-form">
-    <style is="custom-style">
-        .iron-icon {
+    <style>
+        iron-icon {
             color: #3F51B5;
         }
 
         form > paper-button:not([disabled]) {
-            background: #03a9f4;
+            background: var(--primary-background-color);
             color: white;
         }
 
@@ -22,37 +20,40 @@
         }
 
         .success-toast {
-            --paper-toast-background-color: #03a9f4;
-            --paper-toast-color: white;
+            background-color: var(--primary-background-color);
+            color: white;
         }
 
         .error-toast {
-            --paper-toast-background-color: red;
-            --paper-toast-color: white;
+            background-color: red;
+            color: white;
+        }
+
+        paper-spinner {
+            padding-left: 15px;
         }
     </style>
     <template>
         <h2 id="event-listeners" class="has-permalink">Add new order</h2>
-        <iron-ajax
-                auto
-                id="getDrinksAjax"
-                url="/rest/v1.0/drink"
-                handle-as="json"
-                on-response="setDrink"></iron-ajax>
+        <!--  <iron-ajax
+                  id="getDrinksAjax"
+                  url="/rest/v1.0/drink"
+                  handle-as="json"
+                  on-response="processDrinkTypes"></iron-ajax>-->
         <form is="iron-form" id="addItemForm" on-change="_onFormChanged">
-            <label id="typeRadioLabel"> Type of Drink:</label>
+            <label id="typeSelectLabel"> Type of Drink:</label>
             <!--TODO: add image of drink here, seperate tea and coffe -->
-            <paper-radio-group on-iron-select="_onTypeSelected" selected="{{type}}"
-                               aria-labelledby="typeRadioLabel" fallbackSelection
-                               id="typeRadio" required>
-                <template is="dom-repeat" items='{{types}}'>
+            <paper-radio-group on-iron-select="_onTypeSelected" selected="{{name}}"
+                               aria-labelledby="typeSelectLabel" fallbackSelection
+                               id="typeSelect" required>
+                <template is="dom-repeat" items='{{names}}'>
                     <paper-radio-button name="{{item}}">{{item}}</paper-radio-button>
                 </template>
             </paper-radio-group>
 
             <br>
             <label id="sizeLabel">Size: </label>
-            <paper-radio-group id="sizeRadio" on-iron-items-changed="_onSizesChanged" on-iron-select="_onFormChanged"
+            <paper-radio-group id="sizeSelect" on-iron-items-changed="_onSizesChanged" on-iron-select="_onFormChanged"
                                selected="{{size}}" ria-labelledby="sizeLabel" required>
                 <template is="dom-repeat" items='{{sizes}}'>
                     <paper-radio-button name="{{item}}">{{item}}</paper-radio-button>
@@ -60,33 +61,39 @@
             </paper-radio-group>
             <!--TODO: add image of drink size here-->
             <br>
-            <div class="layout horizontal">
+            <div class="layout horizontal center">
                 <paper-input required label="Quantity" min="1" type="number" on-change="_onFormChanged"
                              value="{{quantity}}"></paper-input>
+
                 <paper-icon-button on-tap="increaseQuantity" icon="icons:add-circle-outline"
-                                   title="increase"></paper-icon-button>
+                                   title="increase">
+                </paper-icon-button>
                 <paper-icon-button on-tap="decreaseQuantity" icon="icons:remove-circle-outline"
-                                   title="decrease"></paper-icon-button>
+                                   title="decrease">
+                </paper-icon-button>
                 <br>
             </div>
-
-            <paper-input required label="Price Unit" min="0" type="number" readonly
-                         value="{{unitPrice}}"></paper-input>
+            <div class="layout horizontal">
+                <paper-input required label="Price Unit" min="0" type="number" readonly
+                             value="{{price}}"></paper-input>
+            </div>
             <br>
-            <paper-input required autoValidate label="Total" min="0" type="number" readonly
-                         value="{{total}}"></paper-input>
+            <div class="layout horizontal">
+                <paper-input required autoValidate label="Total" min="0" type="number" readonly
+                             value="{{total}}"></paper-input>
+            </div>
             <br>
-
-            <paper-button disabled raised on-tap="addItem" id="submitItemButton">Add
-                <paper-spinner id="spinner" hidden></paper-spinner>
+            <paper-button disabled raised on-tap="addItem" id="submitItemButton" disabled$="{{submitting}}">Add
+                <paper-spinner id="spinner" active="{{submitting}}" hidden$="{{!submitting}}"></paper-spinner>
             </paper-button>
-            <paper-button raised on-tap="resetItem">Reset</paper-button>
-            <iron-ajax id="addItemAjax" content-type="application/json" handle-as="json" timeout="5000"
+            <paper-button raised on-tap="resetItem" disabled$="{{submitting}}">Reset</paper-button>
+            <iron-ajax id="addItemAjax" content-type="application/json" handle-as="json"
                        url="/rest/v1.0/order" method="PUT" body="{{params}}" on-error="_onAddOrderError"
                        on-response="_onAddOrderResponse">
             </iron-ajax>
-            <paper-toast id="addItemToast" duration="10000" class="{{toastClass}}" text="{{toast}}">
-                <paper-button onclick="addItemToast.toggle()" class="yellow-button">Close</paper-button>
+            {{toastClass}}
+            <paper-toast id="toast" duration="10000" class="fit-bottom" text="{{toast}}">
+                <paper-button onclick="toast.toggle()" class="yellow-button">Close</paper-button>
             </paper-toast>
         </form>
     </template>
@@ -97,71 +104,87 @@
             properties: {
                 params: {
                     type: Object,
-                    computed: '_computeParams(type, size, unitPrice, quantity, total)'
+                    computed: '_computeParams(name, size, price, quantity, total)'
                 },
                 quantity: {
                     type: Number,
                     value: 1
+                },
+                submitting: {
+                    type: Boolean,
+                    value: false
+                },
+                drinks: {
+                    type: Array,
+                    observer: "processDrinkTypes"
                 }
             },
-            _computeParams: function (type, size, unitPrice, quantity, total) {
-                return {type: type, size: size, unitPrice: unitPrice, quantity: quantity, amount: total};
+            init: function () {
+                /* send ajax to get all drinks type only the first time*/
+                if (_.size(this.drinks) == 0) {
+                    getDrinksAjax.generateRequest();
+                }
+            },
+            _computeParams: function (name, size, price, quantity, total) {
+                return {
+                    name: name,
+                    size: size,
+                    type: this.type,
+                    price: price,
+                    quantity: quantity,
+                    amount: total
+                };
             },
             _onAddOrderError: function (e) {
-                this.toastClass = "error-toast";
-                addItemToast.show({text: "An error occurred on the server when adding new order: " + e.detail.request.response.message});
+                toast.classList.remove("success-toast");
+                toast.classList.add("error-toast");
+                this.submitting = false;
+                toast.show({text: "An error occurred on the server when adding new order: " + _.get(e, "detail.request.response.message", "")});
             },
             _onAddOrderResponse: function (e) {
-                this.toastClass = "success-toast";
-                addItemToast.show({text: "Order added successfully!"});
+                this.submitting = false;
+                toast.classList.remove("error-toast");
+                toast.classList.add("success-toast");
+                toast.show({text: "Order added successfully!"});
             },
-            ready: function () {
-                console.log("ready");
-            },
-            created: function () {
-                console.log("created");
-            },
-            setDrink: function (drinks) {
-                console.log("setDrink");
-                this.drinks = this.$.getDrinksAjax.lastResponse;
-                this.types = _.uniq(_.map(this.drinks, 'type'));
-                this.type = this.types[0];
-                console.log("this.types : " + this.types);
+            processDrinkTypes: function () {
+                this.names = _.uniq(_.map(this.drinks, 'name'));
+                this.name = this.names[0];
             },
             resetItem: function () {
-                console.log("resetItem item form");
                 addItemForm.reset();
-                this.type = undefined;
+                this.name = undefined;
                 this.size = undefined;
                 this.toggleSubmit(true);
             },
             addItem: function (e) {
-                console.log("add item to order");
-                var generateRequest = addItemAjax.generateRequest();
-                console.log(generateRequest);
+                this.submitting = true;
+                addItemAjax.generateRequest();
             },
             _onTypeSelected: function () {
                 console.log("_onTypeSelected");
-                this.sizes = _.map(_.filter(this.drinks, ['type', this.type]), 'size');
+                this.sizes = _.map(_.filter(this.drinks, ['name', this.name]), 'size');
             },
             _onSizesChanged: function () {
-                if (_.isUndefined(this.size) || !_.includes(this.sizes, this.size))
+                //if none selected or selected is not included in current selectables --> select first one
+                if (!_.isUndefined(this.sizes) && ( _.isUndefined(this.size) || !_.includes(this.sizes, this.size)))
                     this.size = this.sizes[0];
             },
             _onFormChanged: function () {
                 console.log("_onFormChanged");
-                console.log("type : " + this.type);
-                console.log("this.size : " + this.size);
-                if (!_.isUndefined(this.type) && !_.isUndefined(this.size)) {
-                    this.unitPrice = _.find(this.drinks, {
-                        'type': this.type,
+                if (!_.isUndefined(this.name) && !_.isUndefined(this.size)) {
+                    var drink = _.find(this.drinks, {
+                        'name': this.name,
                         'size': this.size
-                    }).price;
+                    });
+                    this.price = drink.price;
+                    this.type = drink.type;
                     // keep the precision to 2 decimals
-                    this.total = (this.unitPrice * this.quantity ).toFixed(2);
+                    this.total = (drink.price * this.quantity ).toFixed(2);
                     this.toggleSubmit(false);
                 } else {
-                    this.unitPrice = '';
+                    this.drink = {};
+                    this.price = '';
                     this.total = '';
                     this.toggleSubmit(true);
                 }

@@ -17,6 +17,10 @@
     "aha-table": "^2.0.13",
     "paper-datatable": "^0.9.8",
     "polymer-paper-datatable": "^0.9.16",
-    "neon-animation": "PolymerElements/neon-animation#^1.2.4"
+    "neon-animation": "PolymerElements/neon-animation#^1.2.4",
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.3.3",
+    "polymer-date-picker": "^0.0.11",
+    "iron-label": "PolymerElements/iron-label#^1.0.2",
+    "paper-date-picker": "polymer-paper-date-picker#^1.1.4"
   }
 }

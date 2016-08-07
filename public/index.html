@@ -12,6 +12,7 @@
     <link rel="import" href="bower_components/iron-icons/iron-icons.html">
     <link rel="import" href="bower_components/iron-icons/image-icons.html">
     <link rel="import" href="bower_components/iron-form/iron-form.html">
+    <link rel="import" href="bower_components/iron-label/iron-label.html">
     <link rel="import" href="bower_components/iron-pages/iron-pages.html">
     <link rel="import" href="bower_components/iron-selector/iron-selector.html">
 
@@ -24,6 +25,8 @@
     <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
     <link rel="import" href="bower_components/paper-radio-group/paper-radio-group.html">
     <link rel="import" href="bower_components/paper-button/paper-button.html">
+    <link rel="import" href="bower_components/paper-fab/paper-fab.html">
+    <link rel="import" href="bower_components/paper-ripple/paper-ripple.html">
     <link rel="import" href="bower_components/paper-spinner/paper-spinner.html">
     <link rel="import" href="bower_components/paper-styles/color.html">
     <link rel="import" href="bower_components/paper-styles/typography.html">
@@ -36,10 +39,10 @@
     <link rel="import" href="bower_components/app-layout/app-toolbar/app-toolbar.html">
     <link rel="import" href="bower_components/app-layout/app-drawer/app-drawer.html">
 
-    <!--  <link rel="import" href="bower_components/sortable-table/sortable-table.html">
-      <link rel="stylesheet" href="bower_components/sortable-table/css/bootstrap.css" shim-shadowdom>-->
+    <!-- Third party component-->
     <link rel="import" href="bower_components/aha-table/dist/aha-table.html">
     <link rel="import" href="bower_components/paper-datatable/paper-datatable.html">
+    <link rel="import" href="bower_components/paper-datatable/paper-datatable-card.html">
 
     <!-- custom element-->
     <link rel="import" href="add-order-form.html">
@@ -47,9 +50,12 @@
 
     <script src="bower_components/lodash/dist/lodash.min.js"></script>
     <style is="custom-style">
+        :root {
+            --primary-background-color: #1565c0;
+        }
+
         app-toolbar {
-            /* Toolbar is the main header, so give it some color */
-            background-color: #1E88E5;
+            background-color: var(--primary-background-color);
             font-family: 'Roboto', Helvetica, sans-serif;
             color: white;
             --app-toolbar-font-size: 24px;
@@ -87,6 +93,7 @@
             }
         }
     </style>
+
 </head>
 <body>
 <!-- Main content -->
@@ -94,11 +101,17 @@
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{data}}">
     </app-route>
+    <iron-ajax
+            auto
+            id="getDrinksAjax"
+            url="/rest/v1.0/drink"
+            handle-as="json"
+            last-response="{{drinks}}"></iron-ajax>
     <app-drawer-layout>
         <app-drawer>
-            <iron-selector class="nav-menu">
-                <a href="#/orders">Orders</a>
-                <a href="#/addOrder">Add Order</a>
+            <iron-selector class="nav-menu" attr-for-selected="name" selected="{{data.page}}">
+                <a href="#/orders" name="orders">Orders</a>
+                <a href="#/addOrder" name="addOrder">Add Order</a>
                 <a href="#/orders/type">Order by type</a>
                 <a href="#/orders/size">Order by size</a>
             </iron-selector>
@@ -108,23 +121,24 @@
                   <paper-item>Order by size</paper-item>
               </paper-menu>-->
         </app-drawer>
-        <app-toolbar class="main-title-toolbar">
+        <app-toolbar class="center main-title-toolbar">
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div class="title"> Order Management</div>
         </app-toolbar>
 
         <neon-animated-pages id="pages" selected="{{data.page}}" attr-for-selected='name'
+                             on-iron-select="_onPageSelected"
                              entryAnimation="slide-from-top-animation" exitAnimation='slide-down-animation'>
             <neon-animatable name="addOrder">
-                <add-order-form></add-order-form>
+                <add-order-form id="addOrder" drinks="{{drinks}}"></add-order-form>
             </neon-animatable>
             <neon-animatable name="orders">
-                <all-orders></all-orders>
+                <all-orders id="orders" drinks="{{drinks}}"></all-orders>
             </neon-animatable>
         </neon-animated-pages>
 
     </app-drawer-layout>
-    <script src="javascripts/script.js"></script>
 </template>
+<script src="javascripts/script.js"></script>
 </body>
 </html>
