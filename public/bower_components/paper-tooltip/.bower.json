@@ -40,6 +40,6 @@
     "commit": "6be894127678900f6e506b56fc9622ab768c03aa"
   },
   "_source": "git://github.com/PolymerElements/paper-tooltip.git",
-  "_target": "^1.1.2",
+  "_target": "~1.1.1",
   "_originalSource": "PolymerElements/paper-tooltip"
 }

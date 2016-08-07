@@ -14,7 +14,7 @@ function MakePromise (asap) {
 			this._deferreds.push(deferred);
 			return
 		}
-		asap(function() {p
+		asap(function() {
 			var cb = me._state ? deferred.onFulfilled : deferred.onRejected
 			if (typeof cb !== 'function') {
 				(me._state ? deferred.resolve : deferred.reject)(me._value);

@@ -55,6 +55,6 @@
     "commit": "61d482886c58324b682cea3c605695c31154e084"
   },
   "_source": "git://github.com/PolymerElements/paper-input.git",
-  "_target": "^1.0.0",
+  "_target": "^1.0.9",
   "_originalSource": "PolymerElements/paper-input"
 }

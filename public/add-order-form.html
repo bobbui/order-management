@@ -1,11 +1,17 @@
 <dom-module id="add-order-form">
     <style include="shared-styles"></style>
     <style>
-
         iron-icon {
+            height: 40px;
+            width: 40px;
+            padding-left: 0;
             color: #3F51B5;
         }
-
+        paper-icon-button{
+            height: 32px;
+            width: 32px;
+            padding: 0;
+        }
         form > ::content paper-button:not([disabled]) {
             background: var(--primary-background-color);
             color: white;
@@ -30,8 +36,8 @@
             padding-left: 15px;
         }
 
-        div label {
-            min-width: 7em;
+        label {
+            min-width: 6em;
         }
 
         .button-line {
@@ -42,42 +48,78 @@
             color: white;
             margin-right: 0.4em;
         }
+
+        label {
+            font-weight: bold;
+        }
+
+        iron-icon.Tall {
+            height: 32px;
+            width: 32px;
+        }
+
+        iron-icon.Grande {
+            height: 40px;
+            width: 40px;
+        }
+
+        #typeSelect {
+            margin-bottom: 1em;
+        }
+
+        iron-icon.Venti {
+            height: 48px;
+            width: 48px;
+        }
+
+        @media (max-width: 768px) {
+            #sizeSelect paper-radio-button {
+                font-size: 0;
+            }
+
+            iron-icon {
+                padding-right: 0;
+                padding-left: 0;
+            }
+        }
     </style>
     <template>
         <h1>Add new order</h1>
         <form is="iron-form" id="addItemForm" on-change="_onFormChanged">
-            <div class="layout horizontal center">
-                <label>Type of Drink:</label>
+            <iron-grid class="layout horizontal center">
+                <label class="x12">Type:</label>
                 <!--TODO: add image of drink here, seperate tea and coffe -->
-                <paper-radio-group on-iron-select="_onTypeSelected" selected="{{name}}"
+                <paper-radio-group class="x12" on-iron-select="_onTypeSelected" selected="{{name}}"
                                    attr-for-selected="name"
                                    id="typeSelect" required>
-                    <template is="dom-repeat" items='{{names}}'>
-                        <paper-radio-button name="{{item}}">{{item}}</paper-radio-button>
+                    <template is="dom-repeat" items='{{drinkTypes}}'>
+                        <iron-icon icon="custom-svg-icons:{{item.type}}"></iron-icon>
+                        <template is="dom-repeat" items='{{item.names}}'>
+                            <paper-radio-button name="{{item}}">{{item}}</paper-radio-button>
+                        </template>
+                        <br>
                     </template>
                 </paper-radio-group>
-            </div>
-            <div class="layout horizontal center">
-                <label>Size:</label>
-                <paper-radio-group id="sizeSelect" on-iron-items-changed="_onSizesChanged"
+            </iron-grid>
+
+            <iron-grid class="layout horizontal center">
+                <label class="x12">Size:</label>
+                <paper-radio-group class="x12" id="sizeSelect" on-iron-items-changed="_onSizesChanged"
                                    on-iron-select="_onFormChanged"
                                    attr-for-selected="name" selected="{{size}}" required>
                     <template is="dom-repeat" items='{{sizes}}'>
-                        <paper-radio-button name="{{item}}">{{item}}</paper-radio-button>
+                        <paper-radio-button name="{{item}}"> {{item}}</paper-radio-button>
+                        <iron-icon class$="{{item}}" icon="custom-svg-icons:size"></iron-icon>
                     </template>
                 </paper-radio-group>
-            </div>
-
-            <!--TODO: add image of drink size here-->
+            </iron-grid>
             <div class="layout horizontal center">
                 <label>Quantity:</label>
                 <paper-input required min="1" type="number" on-change="_onFormChanged" class="flex"
                              value="{{quantity}}"></paper-input>
-                <paper-icon-button on-tap="increaseQuantity" icon="add-box"
-                                   title="increase">
+                <paper-icon-button on-tap="increaseQuantity" icon="add-box" title="increase">
                 </paper-icon-button>
-                <paper-icon-button on-tap="decreaseQuantity" icon="indeterminate-check-box"
-                                   title="decrease">
+                <paper-icon-button on-tap="decreaseQuantity" icon="indeterminate-check-box" title="decrease">
                 </paper-icon-button>
                 <br>
             </div>
@@ -105,7 +147,6 @@
                            url="/rest/v1.0/order" method="PUT" body="{{params}}" on-error="_onAddOrderError"
                            on-response="_onAddOrderResponse">
                 </iron-ajax>
-                {{toastClass}}
                 <paper-toast id="toast" duration="10000" class="fit-bottom" text="{{toast}}">
                     <paper-button onclick="toast.toggle()" class="yellow-button">Close</paper-button>
                 </paper-toast>
@@ -135,10 +176,6 @@
                 }
             },
             init: function () {
-                /* send ajax to get all drinks type only the first time*/
-                if (_.size(this.drinks) == 0) {
-                    getDrinksAjax.generateRequest();
-                }
             },
             _computeParams: function (name, size, price, quantity, total) {
                 return {
@@ -163,6 +200,10 @@
                 toast.show({text: "Order added successfully!"});
             },
             processDrinkTypes: function () {
+                var self = this;
+                this.drinkTypes = _.map(_.uniq(_.map(this.drinks, 'type')), function (type) {
+                    return {type: type, names: _.uniq(_.map(_.filter(self.drinks, ['type', type]), 'name'))}
+                });
                 this.names = _.uniq(_.map(this.drinks, 'name'));
                 this.name = this.names[0];
             },
@@ -177,7 +218,6 @@
                 addItemAjax.generateRequest();
             },
             _onTypeSelected: function () {
-                console.log("_onTypeSelected");
                 this.sizes = _.map(_.filter(this.drinks, ['name', this.name]), 'size');
             },
             _onSizesChanged: function () {
@@ -186,7 +226,6 @@
                     this.size = this.sizes[0];
             },
             _onFormChanged: function () {
-                console.log("_onFormChanged");
                 if (!_.isUndefined(this.name) && !_.isUndefined(this.size)) {
                     var drink = _.find(this.drinks, {
                         'name': this.name,

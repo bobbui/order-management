@@ -18,6 +18,7 @@ var Order = mongoose.model('Order',
 var Drink = mongoose.model('Drink',
     {
         type: String,
+        name: String,
         size: String,
         price: Number,
     });

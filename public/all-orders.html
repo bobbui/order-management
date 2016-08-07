@@ -1,30 +1,35 @@
 <dom-module id="all-orders">
+    <style include="shared-styles"></style>
+    <style>
+        ::content #topBlock {
+            display: none;
+        }
+
+        #datatableCard {
+            margin: 1em 0;
+        }
+
+        #typeFilter {
+            margin-right: 3em;
+        }
+
+        .filter-bar div.x12 > * {
+            float: left;
+
+        }
+
+        .filter-bar div.x12 {
+            margin: 0.5em 0;
+        }
+
+    </style>
     <template>
-        <style include="shared-styles"></style>
-        <style>
-            ::content #topBlock {
-                display: none;
-            }
-
-            #datatableCard {
-                margin: 1em 0;
-            }
-
-            #typeFilter {
-                margin-right: 2em;
-            }
-
-            .filter-bar div.x12 > * {
-                float: left;
-
-            }
-
-            .filter-bar div.x12 {
-                margin: 0.5em 0;
-            }
-
-        </style>
-        <h1>All orders</h1>
+        <iron-media-query query="max-width: 768px" query-matches="{{smallScreen}}"></iron-media-query>
+        <h1 class="horizontal layout">All orders
+            <div class="flex"></div>
+            <paper-icon-button id="refreshIcon" icon="cached" on-tap="init"></paper-icon-button>
+            <paper-tooltip for="refreshIcon" offset="0">Refresh table data</paper-tooltip>
+        </h1>
         <iron-ajax
                 id="getOrdersAjax"
                 url="/rest/v1.0/order"
@@ -33,9 +38,10 @@
         <div class="filter-bar">
             <iron-grid>
                 <div class="x12 layout horizontal center ">
-                    <iron-label>
+                    <iron-label id="filterByTypeLabel">
                         <iron-icon icon="icons:filter-list"></iron-icon>
-                        by type &nbsp;&nbsp;</iron-label>
+                        <span hidden$="{{smallScreen}}">filter</span> by type &nbsp;&nbsp;</iron-label>
+                    <paper-tooltip for="filterByTypeLabel" offset="0">Filter table data by drink type</paper-tooltip>
                     <iron-selector id="typeFilter" multi="true" on-iron-select="_applyFilter"
                                    on-iron-deselect="_applyFilter"
                                    allow-empty-selection attr-for-selected="name">
@@ -45,9 +51,10 @@
                     </iron-selector>
                 </div>
                 <div class="x12 layout horizontal center ">
-                    <iron-label>
+                    <iron-label id="filterBySizeLabel">
                         <iron-icon icon="icons:filter-list">&nbsp;</iron-icon>
-                        by size &nbsp;&nbsp;</iron-label>
+                        <span hidden$="{{smallScreen}}">filter</span> by size &nbsp;&nbsp;</iron-label>
+                    <paper-tooltip for="filterBySizeLabel" offset="0">Filter table data by drink size</paper-tooltip>
                     <iron-selector id="sizeFilter" multi="true" on-iron-select="_applyFilter"
                                    on-iron-deselect="_applyFilter"
                                    allow-empty-selection attr-for-selected="name">
@@ -56,8 +63,6 @@
                         </template>
                     </iron-selector>
                 </div>
-                <div class="flex"></div>
-                <paper-icon-button icon="cached" on-tap="init"></paper-icon-button>
             </iron-grid>
         </div>
         <paper-datatable-card id="datatableCard" selec data-source="{{ordersDataSource}}" progress
@@ -101,17 +106,14 @@
             },
             init: function () {
                 getOrdersAjax.generateRequest();
-                self = this;
             },
             _filter: function (item, key, items) {
                 console.log("filter");
                 var sizes = sizeFilter.selectedValues;
                 var types = typeFilter.selectedValues;
-//                return (_.isUndefined(size) ||  item.size == size) && (_.isUndefined(type) || item.type == type);
                 return (_.size(sizes) == 0 || _.includes(sizes, item.size) ) && (_.size(types) == 0 || _.includes(types, item.type) );
             },
             _applyFilter: function () {
-                console.log("_applyFilter");
                 orderTable.filter = this._filter;
                 orderTable.reload();
             },
