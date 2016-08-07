@@ -1,83 +1,64 @@
 <dom-module id="all-orders">
-    <style>
-        :root {
-            --button-border-radius: 4px;
-        }
-
-        iron-selector > div {
-            @apply(--layout-inline);
-            @apply(--layout-center-center);
-            cursor: pointer;
-            float: left;
-            color: rgba(0, 0, 0, .87);
-            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-            padding: 0.5em 0.57em;
-            min-width: 5.14em;
-            border-color: #dcdcdc;
-        }
-
-        paper-fab {
-            background-color: #1565c0;
-            margin-right: 2em;
-        }
-
-        iron-selector > div:first-of-type {
-            border-bottom-left-radius: var(--button-border-radius);
-            border-top-left-radius: var(--button-border-radius);
-        }
-
-        iron-selector > div:last-of-type {
-            border-bottom-right-radius: var(--button-border-radius);
-            border-top-right-radius: var(--button-border-radius);
-        }
-
-        ::content #topBlock {
-            display: none;
-        }
-
-        #datatableCard {
-            margin-top: 1em;
-        }
-
-        #typeFilter {
-            margin-right: 2em;
-        }
-
-        div.iron-selected {
-            color: white !important;
-            background-color: var(--primary-background-color);
-        }
-    </style>
     <template>
-        <h2 id="event-listeners" class="has-permalink">All orders</h2>
+        <style include="shared-styles"></style>
+        <style>
+            ::content #topBlock {
+                display: none;
+            }
+
+            #datatableCard {
+                margin: 1em 0;
+            }
+
+            #typeFilter {
+                margin-right: 2em;
+            }
+
+            .filter-bar div.x12 > * {
+                float: left;
+
+            }
+
+            .filter-bar div.x12 {
+                margin: 0.5em 0;
+            }
+
+        </style>
+        <h1>All orders</h1>
         <iron-ajax
                 id="getOrdersAjax"
                 url="/rest/v1.0/order"
                 handle-as="json"
                 last-response="{{orders}}"></iron-ajax>
-        <div class="layout horizontal center">
-            <iron-label> &nbsp;
-                <iron-icon icon="icons:filter-list"></iron-icon>
-                By Type:&nbsp;</iron-label>
-            <iron-selector id="typeFilter" multi="true" on-iron-select="_applyFilter"
-                           on-iron-deselect="_applyFilter"
-                           allow-empty-selection attr-for-selected="name">
-                <template is="dom-repeat" items='{{types}}'>
-                    <div name="{{item}}">{{item}}</div>
-                </template>
-            </iron-selector>
-            <iron-label>
-                <iron-icon icon="icons:filter-list">&nbsp;</iron-icon>
-                By Type: &nbsp;</iron-label>
-            <iron-selector id="sizeFilter" multi="true" on-iron-select="_applyFilter"
-                           on-iron-deselect="_applyFilter"
-                           allow-empty-selection attr-for-selected="name">
-                <template is="dom-repeat" items='{{sizes}}'>
-                    <div name="{{item}}">{{item}}</div>
-                </template>
-            </iron-selector>
-            <div class="flex"></div>
-            <paper-fab mini icon="icons:cached" on-tap="init"></paper-fab>
+        <div class="filter-bar">
+            <iron-grid>
+                <div class="x12 layout horizontal center ">
+                    <iron-label>
+                        <iron-icon icon="icons:filter-list"></iron-icon>
+                        by type &nbsp;&nbsp;</iron-label>
+                    <iron-selector id="typeFilter" multi="true" on-iron-select="_applyFilter"
+                                   on-iron-deselect="_applyFilter"
+                                   allow-empty-selection attr-for-selected="name">
+                        <template is="dom-repeat" items='{{types}}'>
+                            <div name="{{item}}">{{item}}</div>
+                        </template>
+                    </iron-selector>
+                </div>
+                <div class="x12 layout horizontal center ">
+                    <iron-label>
+                        <iron-icon icon="icons:filter-list">&nbsp;</iron-icon>
+                        by size &nbsp;&nbsp;</iron-label>
+                    <iron-selector id="sizeFilter" multi="true" on-iron-select="_applyFilter"
+                                   on-iron-deselect="_applyFilter"
+                                   allow-empty-selection attr-for-selected="name">
+                        <template is="dom-repeat" items='{{sizes}}'>
+                            <div name="{{item}}">{{item}}</div>
+                        </template>
+                    </iron-selector>
+                </div>
+                <div class="flex"></div>
+                <paper-icon-button icon="cached" on-tap="init"></paper-icon-button>
+            </iron-grid>
         </div>
         <paper-datatable-card id="datatableCard" selec data-source="{{ordersDataSource}}" progress
                               id-property="sha1">
@@ -94,8 +75,8 @@
                                         sortable></paper-datatable-column>
                 <paper-datatable-column header="Amount" property="amount" type="Number" align="right"
                                         sortable></paper-datatable-column>
-                <paper-datatable-column header="Datetime" property="time" type="Date" align="right" sortable
-                ></paper-datatable-column>
+                <paper-datatable-column header="Datetime" property="time" type="Date" align="right" sortable sorted
+                                        sort-direction="desc"></paper-datatable-column>
             </paper-datatable>
         </paper-datatable-card>
 

@@ -1,22 +1,19 @@
 <dom-module id="add-order-form">
+    <style include="shared-styles"></style>
     <style>
+
         iron-icon {
             color: #3F51B5;
         }
 
-        form > paper-button:not([disabled]) {
+        form > ::content paper-button:not([disabled]) {
             background: var(--primary-background-color);
             color: white;
         }
 
-        h2 {
-            border-bottom: 1px solid #f50057;
-            margin: 20px 0;
-        }
-
-        .yellow-button {
+        ::content.yellow-button {
             text-transform: none;
-            color: #eeff41;
+            color: #eeff41 !important;
         }
 
         .success-toast {
@@ -32,69 +29,87 @@
         paper-spinner {
             padding-left: 15px;
         }
+
+        div label {
+            min-width: 7em;
+        }
+
+        .button-line {
+            margin: 1em 1em;
+        }
+
+        paper-button iron-icon {
+            color: white;
+            margin-right: 0.4em;
+        }
     </style>
     <template>
-        <h2 id="event-listeners" class="has-permalink">Add new order</h2>
-        <!--  <iron-ajax
-                  id="getDrinksAjax"
-                  url="/rest/v1.0/drink"
-                  handle-as="json"
-                  on-response="processDrinkTypes"></iron-ajax>-->
+        <h1>Add new order</h1>
         <form is="iron-form" id="addItemForm" on-change="_onFormChanged">
-            <label id="typeSelectLabel"> Type of Drink:</label>
-            <!--TODO: add image of drink here, seperate tea and coffe -->
-            <paper-radio-group on-iron-select="_onTypeSelected" selected="{{name}}"
-                               aria-labelledby="typeSelectLabel" fallbackSelection
-                               id="typeSelect" required>
-                <template is="dom-repeat" items='{{names}}'>
-                    <paper-radio-button name="{{item}}">{{item}}</paper-radio-button>
-                </template>
-            </paper-radio-group>
-
-            <br>
-            <label id="sizeLabel">Size: </label>
-            <paper-radio-group id="sizeSelect" on-iron-items-changed="_onSizesChanged" on-iron-select="_onFormChanged"
-                               selected="{{size}}" ria-labelledby="sizeLabel" required>
-                <template is="dom-repeat" items='{{sizes}}'>
-                    <paper-radio-button name="{{item}}">{{item}}</paper-radio-button>
-                </template>
-            </paper-radio-group>
-            <!--TODO: add image of drink size here-->
-            <br>
             <div class="layout horizontal center">
-                <paper-input required label="Quantity" min="1" type="number" on-change="_onFormChanged"
-                             value="{{quantity}}"></paper-input>
+                <label>Type of Drink:</label>
+                <!--TODO: add image of drink here, seperate tea and coffe -->
+                <paper-radio-group on-iron-select="_onTypeSelected" selected="{{name}}"
+                                   attr-for-selected="name"
+                                   id="typeSelect" required>
+                    <template is="dom-repeat" items='{{names}}'>
+                        <paper-radio-button name="{{item}}">{{item}}</paper-radio-button>
+                    </template>
+                </paper-radio-group>
+            </div>
+            <div class="layout horizontal center">
+                <label>Size:</label>
+                <paper-radio-group id="sizeSelect" on-iron-items-changed="_onSizesChanged"
+                                   on-iron-select="_onFormChanged"
+                                   attr-for-selected="name" selected="{{size}}" required>
+                    <template is="dom-repeat" items='{{sizes}}'>
+                        <paper-radio-button name="{{item}}">{{item}}</paper-radio-button>
+                    </template>
+                </paper-radio-group>
+            </div>
 
-                <paper-icon-button on-tap="increaseQuantity" icon="icons:add-circle-outline"
+            <!--TODO: add image of drink size here-->
+            <div class="layout horizontal center">
+                <label>Quantity:</label>
+                <paper-input required min="1" type="number" on-change="_onFormChanged" class="flex"
+                             value="{{quantity}}"></paper-input>
+                <paper-icon-button on-tap="increaseQuantity" icon="add-box"
                                    title="increase">
                 </paper-icon-button>
-                <paper-icon-button on-tap="decreaseQuantity" icon="icons:remove-circle-outline"
+                <paper-icon-button on-tap="decreaseQuantity" icon="indeterminate-check-box"
                                    title="decrease">
                 </paper-icon-button>
                 <br>
             </div>
-            <div class="layout horizontal">
-                <paper-input required label="Price Unit" min="0" type="number" readonly
+            <div class="layout horizontal center">
+                <label>Price Unit:</label>
+                <paper-input required min="0" type="number" readonly class="flex"
                              value="{{price}}"></paper-input>
             </div>
-            <br>
-            <div class="layout horizontal">
-                <paper-input required autoValidate label="Total" min="0" type="number" readonly
+            <div class="layout horizontal center">
+                <label>Total:</label>
+                <paper-input required autoValidate min="0" type="number" readonly class="flex"
                              value="{{total}}"></paper-input>
             </div>
-            <br>
-            <paper-button disabled raised on-tap="addItem" id="submitItemButton" disabled$="{{submitting}}">Add
-                <paper-spinner id="spinner" active="{{submitting}}" hidden$="{{!submitting}}"></paper-spinner>
-            </paper-button>
-            <paper-button raised on-tap="resetItem" disabled$="{{submitting}}">Reset</paper-button>
-            <iron-ajax id="addItemAjax" content-type="application/json" handle-as="json"
-                       url="/rest/v1.0/order" method="PUT" body="{{params}}" on-error="_onAddOrderError"
-                       on-response="_onAddOrderResponse">
-            </iron-ajax>
-            {{toastClass}}
-            <paper-toast id="toast" duration="10000" class="fit-bottom" text="{{toast}}">
-                <paper-button onclick="toast.toggle()" class="yellow-button">Close</paper-button>
-            </paper-toast>
+            <div class="layout horizontal center button-line end-justified">
+                <paper-button disabled raised on-tap="addItem" id="submitItemButton" disabled$="{{submitting}}">
+                    <iron-icon icon="check"></iron-icon>
+                    Add
+                    <paper-spinner id="spinner" active="{{submitting}}" hidden$="{{!submitting}}"></paper-spinner>
+                </paper-button>
+                <paper-button raised on-tap="resetItem" disabled$="{{submitting}}">
+                    <iron-icon icon="clear"></iron-icon>
+                    Clear
+                </paper-button>
+                <iron-ajax id="addItemAjax" content-type="application/json" handle-as="json"
+                           url="/rest/v1.0/order" method="PUT" body="{{params}}" on-error="_onAddOrderError"
+                           on-response="_onAddOrderResponse">
+                </iron-ajax>
+                {{toastClass}}
+                <paper-toast id="toast" duration="10000" class="fit-bottom" text="{{toast}}">
+                    <paper-button onclick="toast.toggle()" class="yellow-button">Close</paper-button>
+                </paper-toast>
+            </div>
         </form>
     </template>
     <script>

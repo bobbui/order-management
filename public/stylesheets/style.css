@@ -4,4 +4,7 @@ body {
 app-toolbar {
   padding: 0 !important; }
 
+#pages > * {
+  padding: 1% 4%; }
+
 /*# sourceMappingURL=style.css.map */

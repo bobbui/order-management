@@ -1,0 +1,52 @@
+<dom-module id="shared-styles">
+    <template>
+        <style>
+            h1 {
+                @apply(--paper-font-title);
+                border-bottom: 1px solid #f50057;
+            }
+
+            paper-icon-button {
+                color: var(--primary-background-color);
+            }
+
+            neon-animatable {
+                @apply(--shadow-elevation-2dp);
+            }
+
+            iron-selector > div {
+                @apply(--layout-inline);
+                @apply(--layout-center-center);
+                cursor: pointer;
+                float: left;
+                color: rgba(0, 0, 0, .87);
+                @apply(--shadow-elevation-2dp);
+                padding: 0.5em 0.57em;
+                min-width: 5.14em;
+                border-color: #dcdcdc;
+            }
+
+            iron-selector > div:first-of-type {
+                border-bottom-left-radius: var(--button-border-radius);
+                border-top-left-radius: var(--button-border-radius);
+            }
+
+            iron-selector > div:last-of-type {
+                border-bottom-right-radius: var(--button-border-radius);
+                border-top-right-radius: var(--button-border-radius);
+            }
+
+            div.iron-selected {
+                color: white !important;
+                background-color: var(--primary-background-color);
+            }
+
+            @media (max-width: 768px) {
+                iron-selector > div {
+                    padding: 0.3em 0.4em;
+                    min-width: 4.14em;
+                }
+            }
+        </style>
+    </template>
+</dom-module>
