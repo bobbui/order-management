@@ -46,10 +46,11 @@ Database includes two following collections:
 }
 ```
 
-##Application workflow
+##Main requirement
 ###0) Adding orders
-Image go here
-Mobile Image go here
+![alt text](https://raw.githubusercontent.com/thangbn/Direct-File-Downloader/master/screenshot/Search.PNG "Search screen")
+
+![alt text](https://raw.githubusercontent.com/thangbn/Direct-File-Downloader/master/screenshot/Search.PNG "Search screen")
 
 ###1)Keep track of all orders (total sales)
 All orders are displayed in table, default sorted by datetime in descending order.
@@ -59,14 +60,12 @@ Mobile Image go here
 ###2) Group orders by type of orders (coffee or tea)
 Using “filter by type” to fitler order by drinks’ type: coffee or/and tea
 Image go here
-Mobile Image go here
 
 ###3) Group orders by type of size (tall, grande or venti)
 Using “filter by size” to fitler order by drinks’ size: tall, grande and/or venti
 Image go here
-Mobile Image go here
 
-##Addiontional question
+##Additional question
 
 ###0)	What if we want a new type of coffee, a new type of tea?
 
