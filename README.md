@@ -5,7 +5,7 @@
 -  **Database**: MongoDB
 
 ##Deployment
-Application is live at: [https://orders-management-system.herokuapp.com](https://orders-management-system.herokuapp.com )
+Application is live at:[https://orders-management-system.herokuapp.com/index.vulcanized.html](https://orders-management-system.herokuapp.com/index.vulcanized.html ) (optimized version using vulcanize) or [https://orders-management-system.herokuapp.com](https://orders-management-system.herokuapp.com ) (original source code)
 -  The application is deployed on **Heroku** using source code pulled directly from GitHub.
 -  The database is deployed on **mlab.com** cloud. 
     -  You can access database using this connection string: 
@@ -58,7 +58,7 @@ Database includes two following collections:
 <img src="https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/add_Order-M.png" width="600">
 
 ###1)Keep track of all orders (total sales)
-All orders are displayed in a table, default sorted by order time in descending order.
+All orders are displayed in a table, default sorted by order time in descending order. Date time is in UTC, not local time.
 -  View all orders on desktop:
 ![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/All_Orders.png "All orders on desktop")
 
