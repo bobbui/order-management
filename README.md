@@ -48,16 +48,16 @@ Database includes two following collections:
 
 ##Main requirement
 ###0) Adding orders
+-  Add new order on desktop
 ![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/add_Order.png "Add new order on desktop")
-
-![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/add_Order-M.png "Add new order on mobile")
-<img src="https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/add_Order-M.png" width="800">
+-  Add new order on mobile
+<img src="https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/add_Order-M.png" width="600">
 ###1)Keep track of all orders (total sales)
 All orders are displayed in table, default sorted by datetime in descending order.
+-  View all orders on desktop:
 ![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/All_Orders.png "All orders on desktop")
-
-![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/AllOrders-M.png "All orders on mobile")
-<img src="https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/AllOrders-M.png" width="800">
+-  View all orders on mobile:
+<img src="https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/AllOrders-M.png" width="600">
 ###2) Group orders by type of orders (coffee or tea)
 Using “filter by type” to fitler order by drinks’ type: coffee or/and tea
 
