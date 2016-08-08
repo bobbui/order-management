@@ -1,0 +1,91 @@
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bce"),
+	"size" : "Tall",
+	"price" : "1.95",
+	"name" : "Espresso",
+	"type" : "Coffee"
+},
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bcf"),
+	"size" : "Grande",
+	"price" : "2.05",
+	"name" : "Espresso",
+	"type" : "Coffee"
+},
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bd0"),
+	"size" : "Venti",
+	"price" : "2.35",
+	"name" : "Espresso",
+	"type" : "Coffee"
+},
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bd1"),
+	"size" : "Tall",
+	"price" : "3.4",
+	"name" : "Latte",
+	"type" : "Coffee"
+},
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bd2"),
+	"size" : "Grande",
+	"price" : "4.45",
+	"name" : "Latte",
+	"type" : "Coffee"
+},
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bd3"),
+	"size" : "Venti",
+	"price" : "4.65",
+	"name" : "Latte",
+	"type" : "Coffee"
+},
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bd4"),
+	"size" : "Tall",
+	"price" : "3.15",
+	"name" : "Cappuccino",
+	"type" : "Coffee"
+},
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bd5"),
+	"size" : "Grande",
+	"price" : "3.75",
+	"name" : "Cappuccino",
+	"type" : "Coffee"
+},
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bd6"),
+	"size" : "Venti",
+	"price" : "4.15",
+	"name" : "Cappuccino",
+	"type" : "Coffee"
+},
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bd7"),
+	"size" : "Tall",
+	"price" : "3.45",
+	"name" : "Green Tea",
+	"type" : "Tea"
+},
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bd8"),
+	"size" : "Grande",
+	"price" : "4.25",
+	"name" : "Green Tea",
+	"type" : "Tea"
+},
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bd9"),
+	"size" : "Venti",
+	"price" : "4.15",
+	"name" : "Green Tea",
+	"type" : "Tea"
+},
+{
+	"_id" : ObjectId("57a3830f2672c0982d6c8bda"),
+	"size" : "Grande",
+	"price" : "1.95",
+	"name" : "Hot Tea",
+	"type" : "Tea"
+},
