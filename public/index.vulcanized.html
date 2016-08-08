@@ -30975,7 +30975,7 @@ var WeakCache = function(limit){
     </style>
     <template>
         <h1>Add new order</h1>
-        <form is="iron-form" id="addItemForm" on-change="_onFormChanged">
+        <form is="iron-form" id="addItemForm">
             <iron-grid class="layout horizontal center">
                 <label class="x12">Type:</label>
                 <paper-radio-group class="x12" on-iron-select="_onTypeSelected" selected="{{name}}" attr-for-selected="name" id="typeSelect" required="">
@@ -31099,6 +31099,7 @@ var WeakCache = function(limit){
             },
             _onTypeSelected: function () {
                 this.sizes = _.map(_.filter(this.drinks, ['name', this.name]), 'size');
+                this._onFormChanged();
             },
             _onSizesChanged: function () {
                 //if none selected or selected is not included in current selectables --> select first one
