@@ -48,22 +48,25 @@ Database includes two following collections:
 
 ##Main requirement
 ###0) Adding orders
-![alt text](https://raw.githubusercontent.com/thangbn/Direct-File-Downloader/master/screenshot/Search.PNG "Search screen")
+![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/add_Order.png "Add new order on desktop")
 
-![alt text](https://raw.githubusercontent.com/thangbn/Direct-File-Downloader/master/screenshot/Search.PNG "Search screen")
+![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/add_Order-M.png "Add new order on mobile")
 
 ###1)Keep track of all orders (total sales)
 All orders are displayed in table, default sorted by datetime in descending order.
-Image go here
-Mobile Image go here
+![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/All_Orders.png "All orders on desktop")
+
+![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/AllOrders-M.png "All orders on mobile")
 
 ###2) Group orders by type of orders (coffee or tea)
 Using “filter by type” to fitler order by drinks’ type: coffee or/and tea
-Image go here
+
+![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/All_Orders-GroupByType.png "Group orders by drink type")
 
 ###3) Group orders by type of size (tall, grande or venti)
 Using “filter by size” to fitler order by drinks’ size: tall, grande and/or venti
-Image go here
+
+![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/All_Orders-GroupBySize.png "Group orders by drink size")
 
 ##Additional question
 
@@ -79,7 +82,7 @@ For example: I added following a new drink type “Americano”:
 	"type" : "Coffee"
 }
 ```
-image here
+![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/Add_New_Drink_Type.png "After add new drink type")
 
 ###1)	What if we want a new size?
 New size can be added in the same way as new drink type except we need to add CSS code for new icon size. CSS can be added to add-order-form.html file as follow:
@@ -99,14 +102,17 @@ For example: I add a “Mini” size for “Cappuccino” into database:
 }
 ```
 And as new CSS to add-order-form.html file as follow
+```
 iron-icon.Mini {
     height: 24px;
     width: 24px;
 }
-image here
+```
+
+![alt text](https://raw.githubusercontent.com/thangbn/order-management/master/screenshot/Add_New_Drink_Size.png "After add new drink size")
 
 ###2)	How would you change the model to add hot/cold options?
-Add hot/cold will require adding new property in drink record.
+Add hot/cold will require adding new property in drink model. On frontend we also need add a new input such as radio button group for user to select hot/cold option. 
 
 ###3)	 (optional) How would you change the model to support adding condiments to drinks (perl, grass jelly,...)
 Condiment can be added separate as a new order item with separated price
