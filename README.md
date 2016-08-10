@@ -1,6 +1,6 @@
 #Overview 
 ##Tech stack:
--  **Client**: Polymer, Lodash
+-  **Frontend**: Polymer, Lodash
 -  **Backend**: Node.js, ExpressJS, Mongoose
 -  **Database**: MongoDB
 
@@ -126,5 +126,5 @@ Add hot/cold will require adding a new property in drink model. On the frontend,
 
 ##3)	 (optional) How would you change the model to support adding condiments to drinks (perl, grass jelly,...)
 We can follow either of two below methods to support condiments:
--  First method:  We will treat condiments just like properties of drink same as adding hot/cold options. We will need to add a new property to the database and add new input field on the front end. This way is simple to implement but may create a large number of drinks result from combinations of multiple drinks and multiple  condiments.
+-  First method:  We will treat condiments just like properties of drink same as adding hot/cold options. We will need to add a new property to the database and add new input field on the front end. This way is simple to implement but may create a large number of drinks result from combinations of multiple drinks with multiple  condiments.
 - Second method: we will treat condiment as separate items that have their own price. They will be ordered separately from drinks. Order total amount will be the sum of drink amount and condiments amount. We will need to add separate condiments section to add order screen. This method requires considerable effort on front-end side but will eliminate the complexity of management of a large number of drinks like the first method.
