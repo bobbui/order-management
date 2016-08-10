@@ -12,7 +12,7 @@
 -  The database is deployed on **mlab.com** cloud. 
     -  You can access database using this connection string: 
 [mongodb://orders:orders@ds029665.mlab.com:29665/orders](mongodb://orders:orders@ds029665.mlab.com:29665/orders)
-    -  Database can be repopulate using exported JSON files in /database folder
+    -  Database can be repopulated using exported JSON files in /database folder
 
 #Application
 ##Assumption
