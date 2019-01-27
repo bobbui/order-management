@@ -1,4 +1,5 @@
 # Overview 
+Toy project to play with Polymer
 ## Tech stack:
 -  **Frontend**: Polymer, Lodash
 -  **Backend**: Node.js, ExpressJS, Mongoose
